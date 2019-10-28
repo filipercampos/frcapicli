@@ -1,2 +1,5 @@
 # frcapicli
-Build resource API common nodejs
+API CLI
+
+Use :
+frcapi generate resource test

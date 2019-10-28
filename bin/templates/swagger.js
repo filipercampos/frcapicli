@@ -1,0 +1,192 @@
+const pluralize = require('pluralize');
+const utils = require('../utils');
+
+/**
+ * Template swagger route
+ */
+module.exports = {
+  /**
+   * @param {resource} Resource is lower case
+   */
+  get: function (resource) {
+
+    //plural
+    let route = pluralize.plural(resource);
+
+    //first letter upper plural
+    let tag = utils.toFirstCase(pluralize.plural(resource));
+    
+    //first letter upper singular
+    let resourceName = utils.toFirstCase(pluralize.singular(resource));
+
+
+    return `
+      # add this code to your swagger file
+      /${route}:
+        x-swagger-router-controller: ${resource}Controller
+        get:
+          tags:
+            - ${tag}
+          summary: Recupera dados de ${route}
+          description: 'Recupera dados de ${route}'
+          operationId: get${tag}
+          parameters: 
+          - in: query
+            name: value
+            type: string
+          responses:
+            "200":
+              description: success
+              schema:
+                $ref: '#/definitions/get${tag}Response'
+            "403":
+                description: Acesso Negado
+                schema: 
+                  $ref: '#/definitions/errorResponse' 
+        post:
+          tags: 
+            - ${tag}
+          summary: Cadastro de ${resource}
+          description: 'Cadastro de ${resource}'
+          operationId: post${resourceName}
+          parameters:
+          - in: body
+            name: body
+            required: true
+            schema:
+              $ref: '#/definitions/post${resourceName}Request'
+          responses:
+            "201":
+              description: created
+              schema:
+                $ref: '#/definitions/postResponse'
+            "403":
+              description: Acesso Negado
+              schema:
+                $ref: '#/definitions/errorResponse'
+            "422":
+              description: Unprocessable Entity
+              schema:
+                $ref: '#/definitions/error${resourceName}PostResponse'
+                  
+      /${route}/{id}:
+        x-swagger-router-controller: ${resource}Controller
+        get:
+          tags:
+            - ${tag}
+          summary: Recupera dados do ${resource}
+          description: 'Recupera dados do ${resource}'
+          operationId: get${resourceName}
+          parameters:
+          - in: path
+            name: id
+            required: true
+            type: integer
+            format: int64
+          responses:
+            "200":
+              description: success
+              schema:
+                $ref: '#/definitions/get${resourceName}Response'
+            "403":
+                description: Acesso Negado
+                schema: 
+                  $ref: '#/definitions/errorResponse'
+        put:
+          tags:
+            - "${tag}"
+          summary: "Atualiza os dados do ${resource}"
+          description: "Atualiza os dados do ${resource}"
+          operationId: "put${resourceName}"
+          parameters:
+          - in: path
+            name: id
+            required: true
+            type: integer
+            format: int64 
+          - in: "body"
+            name: "body"
+            description: "Objeto JSON com os dados do ${resource}"
+            required: true
+            schema:
+                $ref: '#/definitions/put${resourceName}Request'  
+          responses:
+            "200":
+              description: success
+              schema:
+                $ref: '#/definitions/putResponse'
+            "403":
+              description: Acesso Negado
+              schema:
+                $ref: '#/definitions/errorResponse'
+        patch:
+          tags:
+            - ${tag}
+          summary: Altera os dados do ${resource}
+          description: 'Altera os dados do ${resource}'
+          operationId: patch${resourceName}
+          parameters:
+          - in: path
+            name: id
+            required: true
+            type: integer
+            format: int64 
+          - in: body
+            name: body
+            required: true
+            schema:
+              $ref: '#/definitions/patch${resourceName}Request'  
+          responses:
+            "200":
+              description: success
+              schema:
+                $ref: '#/definitions/patchResponse'
+            "403":
+              description: Acesso Negado
+              schema:
+                $ref: '#/definitions/errorResponse'
+      
+    #${tag} #
+    get${tag}Response:
+        type: object
+        properties:
+        data:
+            type: array
+            items:
+            $ref: '#/definitions/${resource}Response'
+    get${resourceName}Response:
+        type: object
+        properties:
+        data:
+            $ref: '#/definitions/${resource}Response'
+    ${resource}Response:
+        type: object
+        properties:
+        id:
+            type: integer
+            format: int64
+    
+    # ${tag} POST Request # 
+    post${resourceName}Request:
+        type: object
+        properties:
+        name:
+            type: string
+    
+    #${tag} PUT Request #
+    put${resourceName}Request:
+        type: object
+        properties:
+        name:
+            type: string    
+    
+    #${tag} PATCH Request #
+    patch${resourceName}Request:
+        type: object
+        properties:
+        name:
+            type: string        
+        `;
+  }
+}
+
