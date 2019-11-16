@@ -3,10 +3,11 @@ API CLI
 
 Resources:
 <ul>
-    <li>  route   <li>
-    <li>  swagger <li>
-<ul>
-Usaing:
+    <li>route</li>
+    <li>swagger</li>
+</ul>
+
+Using:
 
 # Build route files  
 frcapi build route test
@@ -18,6 +19,12 @@ frcapi build swagger <routename>
 frcapi build swagger <routename> [json]
 
 Note: json must have the string format
-Example:
+
+JSON Example:
+
 '{"id":1,"code":"107","name":"Frc","createdIn":1567950290970,"value":2.5}'
+
+Example build swagger route
+
+frcapi build swagger users '{"id":1,"code":"16","name":"Robo","createdIn":1567950290970,"value":2.5}'
 
