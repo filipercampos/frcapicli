@@ -1,5 +1,5 @@
 const pluralize = require('pluralize');
-const utils = require('../utils');
+const utils = require('../utils/utils');
 
 /**
  * Template business object 

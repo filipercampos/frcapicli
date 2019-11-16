@@ -1,5 +1,5 @@
 const pluralize = require('pluralize');
-const utils = require('../utils');
+const utils = require('../utils/utils');
 
 /**
  * Template swagger route controller
@@ -22,6 +22,7 @@ module.exports = class ${resourceUpper}Service extends CommonService {
     constructor() {
         super(new ${resourceUpper}BO());
     }
+    //Specific method
     async method(req, res) {
         try {
     

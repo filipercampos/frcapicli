@@ -1,14 +1,15 @@
 {
-  "name": "frcbuild",
+  "name": "frcapi",
   "version": "1.0.1",
   "author": "Filipe Rezende Campos",
-  "description": "FRC API CLI cria e padroniza recursos de API",
+  "description": "FRC API CLI criar e organiza as rotas de uma API CommonJS",
   "license": "MIT",
   "main": "index.js",
-  "homepage": "https://github.com/filipecampos/frcapicli#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/filipecampos/frcapicli.git"
+  "keywords": [
+    "route"
+  ],
+  "bin": {
+    "frcapi": "index.js"
   },
   "engines": {
     "node": ">=10.10"
@@ -16,11 +17,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "resource"
-  ],
-  "bin": {
-    "frcapi": "./bin/index.js"
+  "homepage": "https://github.com/filipercampos/frcapicli#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/filipercampos/frcapicli.git"
   },
   "dependencies": {
     "commander": "^2.19.0",

@@ -1,192 +1,342 @@
+const fs = require('fs');
+const path = require('path');
 const pluralize = require('pluralize');
-const utils = require('../utils');
+const utils = require('../utils/utils');
+const Exception = require('../exception');
 
 /**
  * Template swagger route
  */
 module.exports = {
+
   /**
+   * Build swagger's route
+   * 
    * @param {resource} Resource is lower case
    */
-  get: function (resource) {
+  createRoute: function (resource) {
 
     //plural
     let route = pluralize.plural(resource);
 
     //first letter upper plural
     let tag = utils.toFirstCase(pluralize.plural(resource));
-    
+
     //first letter upper singular
     let resourceName = utils.toFirstCase(pluralize.singular(resource));
 
+    const swaggerPath = path.join(`./app/api/swagger/swagger.yaml`);
 
-    return `
-      # add this code to your swagger file
-      /${route}:
-        x-swagger-router-controller: ${resource}Controller
-        get:
-          tags:
-            - ${tag}
-          summary: Recupera dados de ${route}
-          description: 'Recupera dados de ${route}'
-          operationId: get${tag}
-          parameters: 
-          - in: query
-            name: value
-            type: string
-          responses:
-            "200":
-              description: success
-              schema:
-                $ref: '#/definitions/get${tag}Response'
-            "403":
-                description: Acesso Negado
-                schema: 
-                  $ref: '#/definitions/errorResponse' 
-        post:
-          tags: 
-            - ${tag}
-          summary: Cadastro de ${resource}
-          description: 'Cadastro de ${resource}'
-          operationId: post${resourceName}
-          parameters:
-          - in: body
-            name: body
-            required: true
-            schema:
-              $ref: '#/definitions/post${resourceName}Request'
-          responses:
-            "201":
-              description: created
-              schema:
-                $ref: '#/definitions/postResponse'
-            "403":
-              description: Acesso Negado
-              schema:
-                $ref: '#/definitions/errorResponse'
-            "422":
-              description: Unprocessable Entity
-              schema:
-                $ref: '#/definitions/error${resourceName}PostResponse'
-                  
-      /${route}/{id}:
-        x-swagger-router-controller: ${resource}Controller
-        get:
-          tags:
-            - ${tag}
-          summary: Recupera dados do ${resource}
-          description: 'Recupera dados do ${resource}'
-          operationId: get${resourceName}
-          parameters:
-          - in: path
-            name: id
-            required: true
-            type: integer
-            format: int64
-          responses:
-            "200":
-              description: success
-              schema:
-                $ref: '#/definitions/get${resourceName}Response'
-            "403":
-                description: Acesso Negado
-                schema: 
-                  $ref: '#/definitions/errorResponse'
-        put:
-          tags:
-            - "${tag}"
-          summary: "Atualiza os dados do ${resource}"
-          description: "Atualiza os dados do ${resource}"
-          operationId: "put${resourceName}"
-          parameters:
-          - in: path
-            name: id
-            required: true
-            type: integer
-            format: int64 
-          - in: "body"
-            name: "body"
-            description: "Objeto JSON com os dados do ${resource}"
-            required: true
-            schema:
-                $ref: '#/definitions/put${resourceName}Request'  
-          responses:
-            "200":
-              description: success
-              schema:
-                $ref: '#/definitions/putResponse'
-            "403":
-              description: Acesso Negado
-              schema:
-                $ref: '#/definitions/errorResponse'
-        patch:
-          tags:
-            - ${tag}
-          summary: Altera os dados do ${resource}
-          description: 'Altera os dados do ${resource}'
-          operationId: patch${resourceName}
-          parameters:
-          - in: path
-            name: id
-            required: true
-            type: integer
-            format: int64 
-          - in: body
-            name: body
-            required: true
-            schema:
-              $ref: '#/definitions/patch${resourceName}Request'  
-          responses:
-            "200":
-              description: success
-              schema:
-                $ref: '#/definitions/patchResponse'
-            "403":
-              description: Acesso Negado
-              schema:
-                $ref: '#/definitions/errorResponse'
-      
+    const swagger = fs.readFileSync(swaggerPath, 'utf8')
+    const data = swagger.replace(/\r/g, '').split('\n');
+
+
+    for (let i = 0; i < data.length; i++) {
+      const lineData = data[i];
+      if (lineData.includes(route)) {
+        console.warn(`Resource Swagger route '${resource}' already exists`);
+        return false;
+      }
+    }
+    //create swagger
+    this.createSwaggerDocs();
+
+    //create data route
+    let dataRoute = `
+  # ${tag} #
+  /${route}:
+    x-swagger-router-controller: ${resource}Controller
+    get:
+      tags:
+        - ${tag}
+      summary: Recupera dados de ${route}
+      description: 'Recupera dados de ${route}'
+      operationId: get${tag}
+      parameters: 
+      - in: query
+        name: value
+        type: string
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/get${tag}Response'
+        "403":
+            description: Acesso Negado
+            schema: 
+              $ref: '#/definitions/errorResponse' 
+    post:
+      tags: 
+        - ${tag}
+      summary: Cadastro de ${resource}
+      description: 'Cadastro de ${resource}'
+      operationId: post${resourceName}
+      parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/post${resourceName}Request'
+      responses:
+        "201":
+          description: created
+          schema:
+            $ref: '#/definitions/postResponse'
+        "403":
+          description: Acesso Negado
+          schema:
+            $ref: '#/definitions/errorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/error${resourceName}PostResponse'
+              
+  /${route}/{id}:
+    x-swagger-router-controller: ${resource}Controller
+    get:
+      tags:
+        - ${tag}
+      summary: Recupera dados do ${resource}
+      description: 'Recupera dados do ${resource}'
+      operationId: get${resourceName}
+      parameters:
+      - in: path
+        name: id
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/get${resourceName}Response'
+        "403":
+            description: Acesso Negado
+            schema: 
+              $ref: '#/definitions/errorResponse'
+    put:
+      tags:
+        - "${tag}"
+      summary: "Atualiza os dados do ${resource}"
+      description: "Atualiza os dados do ${resource}"
+      operationId: "put${resourceName}"
+      parameters:
+      - in: path
+        name: id
+        required: true
+        type: integer
+        format: int64 
+      - in: "body"
+        name: "body"
+        description: "Objeto JSON com os dados do ${resource}"
+        required: true
+        schema:
+            $ref: '#/definitions/put${resourceName}Request'  
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/putResponse'
+        "403":
+          description: Acesso Negado
+          schema:
+            $ref: '#/definitions/errorResponse'
+    patch:
+      tags:
+        - ${tag}
+      summary: Altera os dados do ${resource}
+      description: 'Altera os dados do ${resource}'
+      operationId: patch${resourceName}
+      parameters:
+      - in: path
+        name: id
+        required: true
+        type: integer
+        format: int64 
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/patch${resourceName}Request'  
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/patchResponse'
+        "403":
+          description: Acesso Negado
+          schema:
+            $ref: '#/definitions/errorResponse'
+  
     #${tag} #
     get${tag}Response:
-        type: object
-        properties:
-        data:
-            type: array
-            items:
-            $ref: '#/definitions/${resource}Response'
+      type: object
+      properties:
+      data:
+        type: array
+        items:
+        $ref: '#/definitions/${resource}Response'
     get${resourceName}Response:
-        type: object
-        properties:
-        data:
-            $ref: '#/definitions/${resource}Response'
+      type: object
+      properties:
+      data:
+        $ref: '#/definitions/${resource}Response'
     ${resource}Response:
         type: object
         properties:
         id:
-            type: integer
-            format: int64
+          type: integer
+          format: int64
     
     # ${tag} POST Request # 
     post${resourceName}Request:
-        type: object
-        properties:
+      type: object
+      properties:
         name:
-            type: string
+          type: string
     
     #${tag} PUT Request #
     put${resourceName}Request:
-        type: object
-        properties:
+      type: object
+      properties:
         name:
-            type: string    
+          type: string    
     
     #${tag} PATCH Request #
     patch${resourceName}Request:
-        type: object
-        properties:
+      type: object
+      properties:
         name:
-            type: string        
+          type: string        
         `;
+
+    fs.appendFileSync(swaggerPath, dataRoute, 'utf-8');
+    console.log(`Swagger route ${resource} successfully added`);
+
+  },
+
+
+  /**
+   * Build swagger's properties response
+   * 
+   * @param {Resource name} resource 
+   * @param {JSON response} response 
+   */
+  createResponse: function (resource, response) {
+
+    const swaggerPath = './app/api/swagger/swagger.yaml';
+
+    this.createSwaggerDocs();
+
+    const swagger = fs.readFileSync(swaggerPath, 'utf8')
+    const data = swagger.replace(/\r/g, '').split('\n');
+
+    let resourceUpper = utils.toFirstCase(resource);
+    let resourcePluralUpper = pluralize.plural(utils.toFirstCase(resource));
+
+    let jsonString = JSON.stringify(response).replace('{', '').replace('}', '');
+    let fields = jsonString.split(',');
+    let swaggerProperties = '';
+    var responseName = `${resource}Response`;
+
+    for (let i = 0; i < data.length; i++) {
+      const lineData = data[i];
+      if (lineData.includes(responseName)) {
+        console.warn(`Response '${responseName}  already exists`);
+        return false;
+      }
+    }
+
+    for (let i = 0; i < fields.length; i++) {
+      let f = fields[i].split(':');
+      let field = f[0].replace('\"', '').replace('\"', '');
+      let value = f[1].replace('\"', '').replace('\"', '');
+
+      var input = parseInt(value);
+      var isDecimal = value.includes('.');
+      var realPrecision = 2;
+
+      if (isDecimal) {
+        realPrecision = value.split('.')[1].length;
+      }
+
+      let typeSwagger = isNaN(input)
+        ? 'string'
+        : typeof input === 'number' && isDecimal === false
+          ? utils.isTimespan(value)
+            ? `integer
+        format: int64
+        description: 'Valor timestamp'`
+            : `integer
+        format: int64`
+        : 
+        `number
+        description: 'Decimal (18,${realPrecision})'`;
+
+
+    let fieldSwagger =
+        `${field}:
+        type: ${typeSwagger}
+      `;
+      swaggerProperties += fieldSwagger;
+    }
+
+    let stringData =
+      `\n
+  # ${resourceUpper}
+  get${resourcePluralUpper}Response:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/${responseName}'
+  get${resourceUpper}Response:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/${responseName}'
+  ${responseName}:
+    type: object
+    properties:
+      ${swaggerProperties}`;
+
+    fs.appendFile(swaggerPath, stringData, function (err) {
+      if (err) throw new Exception("Build response fail.=>\n\t" + err);
+      console.log('Response swagger saved!');
+    });
+
+  },
+
+  /**
+   * Created swagger-docs
+   */
+  createSwaggerDocs: function () {
+
+    let dir = './app/api/swagger';
+
+    if (!fs.existsSync(dir)) {
+      console.log(`Creating directory ${dir} ...`);
+      fs.mkdirSync(dir, { recursive: true });
+      console.log(`${dir} successfully created`);
+    }
+
+    let swaggerPath = path.join(`${dir}/swagger.yaml`);
+    if (!fs.existsSync(swaggerPath)) {
+      console.log(`Creating swagger docs ${swaggerPath} ...`);
+
+      const tarjet = path.join(`${__dirname}/swagger.yaml`);
+
+      // destination.yaml will be created or overwritten by default.
+      fs.copyFileSync(tarjet, swaggerPath, (err) => {
+        if (err) {
+          console.log(err);
+          throw err;
+        }
+        console.log(`Swagger-docs successfully created`);
+      });
+    }
   }
+
 }
 
