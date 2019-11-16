@@ -1,30 +1,23 @@
 # frcapicli
 API CLI
 
-Resources:
+# Resources:
 <ul>
     <li>route</li>
     <li>swagger</li>
 </ul>
-
-Using:
-
+ 
 # Build route files  
-frcapi build route test
+frcapi build route user
 
 # Build swagger route
-frcapi build swagger <routename>
+frcapi build swagger users
 
 # Build swagger route and response
-frcapi build swagger <routename> [json]
-
-Note: json must have the string format
-
-JSON Example:
-
-'{"id":1,"code":"107","name":"Frc","createdIn":1567950290970,"value":2.5}'
-
-Example build swagger route
-
 frcapi build swagger users '{"id":1,"code":"16","name":"Robo","createdIn":1567950290970,"value":2.5}'
+
+Note: JSON must be in string format
+
+
+
 
