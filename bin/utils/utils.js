@@ -1,4 +1,5 @@
 'use stric';
+const _ = require('lodash');
 
 module.exports = {
 

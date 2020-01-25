@@ -11,55 +11,56 @@ module.exports = {
 
         return `'use strict';
         
-const Response = require('../helpers/httpResponse');
 const HttpStatusCode = require('../helpers/httpStatusCode');
-const HttpException = require('../exception/httpError.exception');
 
-const CommonService = require('./common.service');
-const ${resourceUpper}BO = require('../../domain/business/${resource}.bo');
+const CommonController = require('./common.controller');
+const ${resourceUpper}Service = require('../../domain/business/${resource}.service');
+const CacheMiddleware = require('./cacheMiddleware');
 
-module.exports = class ${resourceUpper}Service extends CommonService {
+module.exports = class ${resourceUpper}Controller extends CommonController {
     constructor() {
-        super(new ${resourceUpper}BO());
+        super(new ${resourceUpper}Service());
     }
     //Specific method
-    async method(req, res) {
-        try {
-    
-            var body = req.swagger.param;
-            let params = req.swagger.params;
-    
-            //TODO GET OR POST
-            //let result = await this._business.post(body);
-            //let result = await this._business.get(param);
+    // async method(req, res) {
+    //     try {
+    //         //data body
+    //         var body = req.body;
+            
+    //         //realiza a requisica 
+    //         let result = await this._service.method(body);
+      
+    //         super.sendSucess(res, result);
+      
+    //     } catch (err) {
+    //         super.sendError(res, err);
+    //     }
+    // }
 
-            res.status(HttpStatusCode.OK).send(result);
+    //Cache request
+    // async get(req, res) {
     
-        } catch (err) {
-            if (err instanceof HttpException) {
-            Response.responseAPI.error(res, HttpStatusCode.UNPROCESSABLE_ENTITY, err.message);
-            }
-            else {
-            Response.responseAPI.error(res, HttpStatusCode.INTERNAL_SERVER_ERROR, err.message);
-            }
-        }
-    }
+    //     const cache = new CacheMiddleware();
+    //     cache.buildCache(req, 'header_field', 360);
+    
+    //     await super.get(req, res, null);
+    // }
 }
 
 
 module.exports.get${resourceUpper} = function (req, res) {
     const service = new ${resourceUpper}Service();
-    service.findById(req, res);
+    service.getById(req, res);
 }
 
-module.exports.get${resourceLower} = function (req, res) {
+module.exports.get${resourceLower}s = function (req, res) {
     const service = new ${resourceUpper}Service();
-    service.find(req, res);
+    service.get(req, res);
 }
 
 module.exports.post${resourceUpper} = function (req, res) {
     const service = new ${resourceUpper}Service();
-    service.save(req, res);
+    service.post(req, res);
 }
 
 module.exports.put${resourceUpper} = function (req, res) {
@@ -69,8 +70,15 @@ module.exports.put${resourceUpper} = function (req, res) {
 
 module.exports.remove${resourceUpper} = function (req, res) {
     const service = new ${resourceUpper}Service();
-    service.remove(req, res);
-}`;
+    service.patch(req, res);
+}
+
+module.exports.delete${resourceUpper}ById = function (req, res) {
+    const service = new ${resourceUpper}Service();
+    service.deleteById(req, res);
+}
+
+`;
     }
 }
 

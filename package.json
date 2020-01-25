@@ -1,8 +1,8 @@
 {
   "name": "frcapi",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "author": "Filipe Rezende Campos",
-  "description": "FRC API CLI criar e organiza as rotas de uma API CommonJS",
+  "description": "FRC API CLI cria e organiza as rotas de uma API CommonJS",
   "license": "MIT",
   "main": "index.js",
   "keywords": [
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "commander": "^2.19.0",
-    "pluralize": "^7.0.0",
-    "frcapi": "git+https://github.com/filipercampos/frcapicli.git#v1.0"
+    "lodash": "^4.17.15",
+    "pluralize": "^7.0.0"
   }
 }

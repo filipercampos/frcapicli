@@ -5,7 +5,7 @@ const pluralize = require('pluralize');
  * Template data model response
  */
 module.exports = {
-    get: function (resource) {
+    model: function (resource) {
 
         return `'use strict';
         const utils = require('../utils');

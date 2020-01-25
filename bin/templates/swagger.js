@@ -3,6 +3,7 @@ const path = require('path');
 const pluralize = require('pluralize');
 const utils = require('../utils/utils');
 const Exception = require('../exception');
+const _ = require('lodash');
 
 /**
  * Template swagger route
@@ -224,6 +225,9 @@ module.exports = {
    */
   createResponse: function (resource, response) {
 
+    var letters = '/^[A-Za-z]+[0-9]+$/';
+    var numbers = /^[0-9]+$/;
+
     const swaggerPath = './app/api/swagger/swagger.yaml';
 
     this.createSwaggerDocs();
@@ -235,6 +239,7 @@ module.exports = {
     let resourcePluralUpper = pluralize.plural(utils.toFirstCase(resource));
 
     let jsonString = JSON.stringify(response).replace('{', '').replace('}', '');
+    jsonString = jsonString.replace('\"', '').replace('\"', '');
     let fields = jsonString.split(',');
     let swaggerProperties = '';
     var responseName = `${resource}Response`;
@@ -249,32 +254,62 @@ module.exports = {
 
     for (let i = 0; i < fields.length; i++) {
       let f = fields[i].split(':');
-      let field = f[0].replace('\"', '').replace('\"', '');
-      let value = f[1].replace('\"', '').replace('\"', '');
+      let field = f[0];
+      let value = '';
 
-      var input = parseInt(value);
-      var isDecimal = value.includes('.');
-      var realPrecision = 2;
+      //todos os values do split
+      for (let j = 1; j < f.length; j++) {
+        value = value + f[j];
+        // console.warn(`${field}: ${value}\n`);
+      }
+      value = value.trim();
 
-      if (isDecimal) {
-        realPrecision = value.split('.')[1].length;
+      let isString = value.match(letters);
+
+      let isInteger = false;
+      let isDecimal = false;
+      let isBoolean = false;
+      let realPrecision = 2;
+
+      if (isString == null) {
+        isInteger = parseInt(value);
+        //se for nan nao eh inteiro
+        isDecimal = isNaN(isInteger) ? false : value.includes('.');
+        //teste o boolean
+        isBoolean = isNaN(isInteger) ? value === 'true' || value === 'false' : false;
+        
+        //define a precisao do decimal
+        if (isDecimal) {
+          realPrecision = value.split('.')[1].length;
+        }
+
+        let check = !isNaN(parseFloat(value)) && isFinite(value);
+
+        if (check === false) {
+          isInteger = false;
+          isDecimal = false;
+        }
+
       }
 
-      let typeSwagger = isNaN(input)
-        ? 'string'
-        : typeof input === 'number' && isDecimal === false
-          ? utils.isTimespan(value)
-            ? `integer
+      let typeSwagger = 'string';
+
+      if (utils.isTimespan(value) && isDecimal === false) {
+        typeSwagger = `integer
         format: int64
-        description: 'Valor timestamp'`
-            : `integer
-        format: int64`
-        : 
-        `number
+        description: 'Valor timestamp'`;
+      } else if (isInteger && isDecimal === false) {
+        typeSwagger = `integer
+        format: int64`;
+      } else if (isDecimal) {
+        typeSwagger = `number
         description: 'Decimal (18,${realPrecision})'`;
+      } else if (isBoolean) {
+        typeSwagger = 'boolean';
+      }
+      //defaul string 
 
-
-    let fieldSwagger =
+      let fieldSwagger =
         `${field}:
         type: ${typeSwagger}
       `;

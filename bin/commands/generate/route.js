@@ -45,7 +45,7 @@ module.exports = class RouteHelper {
                         controllers
                         swagger
                     domain
-                        business
+                        service
                         model
                 `;
 
