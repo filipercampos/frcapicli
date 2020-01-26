@@ -65,7 +65,7 @@ module.exports.post${resourceUpper} = function (req, res) {
 
 module.exports.put${resourceUpper} = function (req, res) {
     const service = new ${resourceUpper}Service();
-    service.update(req, res);
+    service.put(req, res);
 }
 
 module.exports.remove${resourceUpper} = function (req, res) {
