@@ -46,7 +46,7 @@ module.exports = {
     let dataRoute = `
   # ${tag} #
   /${route}:
-    x-swagger-router-controller: ${resource}Controller
+    x-swagger-router-controller: ${resource}.route
     get:
       tags:
         - ${tag}
