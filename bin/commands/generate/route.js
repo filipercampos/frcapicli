@@ -13,7 +13,7 @@ module.exports = class RouteHelper {
 
             const resourceName = pluralize.singular(name);
 
-            const controllerPath = path.join(`./app/api/controllers/${resourceName}.route.js`);
+            const controllerPath = path.join(`./app/api/controllers/${resourceName}.controller.js`);
             const controllerGenerate = require('../../templates/controller');
 
             const servicePath = path.join(`./app/domain/services/${resourceName}.service.js`);
