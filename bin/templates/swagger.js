@@ -46,7 +46,7 @@ module.exports = {
     let dataRoute = `
   # ${tag} #
   /${route}:
-    x-swagger-router-controller: ${resource}.route
+    x-swagger-router-controller: ${resource}.controller
     get:
       tags:
         - ${tag}
@@ -93,7 +93,7 @@ module.exports = {
        #    $ref: '#/definitions/error${resourceName}PostResponse'
               
   /${route}/{id}:
-    x-swagger-router-controller: ${resource}Controller
+    x-swagger-router-controller: ${resource}.controller
     get:
       tags:
         - ${tag}
