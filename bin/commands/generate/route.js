@@ -11,25 +11,25 @@ module.exports = class RouteHelper {
 
             console.log("Building resources ...");
 
-            var resource = pluralize.singular(name).toLowerCase();
+            const resourceName = pluralize.singular(name);
 
-            const controllerPath = path.join(`./app/api/controllers/${resource}.route.js`);
+            const controllerPath = path.join(`./app/api/controllers/${resourceName}.route.js`);
             const controllerGenerate = require('../../templates/controller');
 
-            const boPath = path.join(`./app/domain/business/${resource}.bo.js`);
-            const boGenerate = require('../../templates/business');
+            const servicePath = path.join(`./app/domain/services/${resourceName}.service.js`);
+            const serviceGenerate = require('../../templates/service');
 
-            const modelPath = path.join(`./app/domain/model/${resource}.model.js`);
+            const modelPath = path.join(`./app/domain/models/${resourceName}.model.js`);
             const modelGenerate = require('../../templates/model');
 
             //controller
             this._write('./app/api/controllers', controllerPath, controllerGenerate.get(name), `Controller '${name}'`)
 
-            //business object
-            this._write('./app/domain/business', boPath, boGenerate.get(name), `Business Object '${name}'`)
+            //service
+            this._write('./app/domain/services', servicePath, serviceGenerate.get(name), `Service '${name}'`)
 
             //model
-            this._write('./app/domain/model', modelPath, modelGenerate.get(name), `Model '${name}'`)
+            this._write('./app/domain/models', modelPath, modelGenerate.get(name), `Model '${name}'`)
 
             //swagger route
             swaggerGenerate.createRoute(name);

@@ -12,11 +12,12 @@ module.exports = {
     return `'use strict';
         
 const CommonService = require('./common.service');
-const ${resourceUpper}Service = require('../../domain/business/${resourceLower}.service');
+const ${resourceUpper}Model = require('../models/${resourceLower}.service');
 
 const { Contract } = require('../persistence/contract');
 const Exception = require('../../api/exceptions/exception');
 const ProcedureException = require('../../api/exceptions/procedure.exception');
+
 
 module.exports = class ${resourceUpper}Service extends CommonService {
     constructor() {
@@ -69,7 +70,7 @@ module.exports = class ${resourceUpper}Service extends CommonService {
         let conn = await this._factory.connectPool();
         let result = await conn.request()
           .input('pName', mssql.VarChar(100), params.name)
-          .execute('Contract.sp${resourceUpper}Post');
+          .execute(Contract.sp${resourceUpper}Post);
   
         return this.getRowsAffected(result);
       }
@@ -77,7 +78,7 @@ module.exports = class ${resourceUpper}Service extends CommonService {
         if (err.class === 11) {
           throw new ErrorException(err.message);
         } else {
-          throw new ProcedureException('Contract.sp${resourceUpper}Post', err.message);
+          throw new ProcedureException(Contract.sp${resourceUpper}Post, err.message);
         }
       }
     }

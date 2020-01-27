@@ -7,14 +7,13 @@ const utils = require('../utils/utils');
 module.exports = {
     get: function (resource) {
         var resourceUpper = pluralize.singular(utils.toFirstCase(resource));
-        var resourceLower = pluralize.singular(utils.toFirstCase(resource, false));
 
         return `'use strict';
         
 const HttpStatusCode = require('../helpers/httpStatusCode');
 
 const CommonController = require('./common.controller');
-const ${resourceUpper}Service = require('../../domain/business/${resource}.service');
+const ${resourceUpper}Service = require('../../domain/services/${resource}.service');
 const CacheMiddleware = require('./cacheMiddleware');
 
 module.exports = class ${resourceUpper}Controller extends CommonController {
@@ -53,7 +52,7 @@ module.exports.get${resourceUpper} = function (req, res) {
     service.getById(req, res);
 }
 
-module.exports.get${resourceLower}s = function (req, res) {
+module.exports.get${resourceUpper}s = function (req, res) {
     const service = new ${resourceUpper}Service();
     service.get(req, res);
 }
@@ -68,7 +67,7 @@ module.exports.put${resourceUpper} = function (req, res) {
     service.put(req, res);
 }
 
-module.exports.remove${resourceUpper} = function (req, res) {
+module.exports.patch${resourceUpper} = function (req, res) {
     const service = new ${resourceUpper}Service();
     service.patch(req, res);
 }

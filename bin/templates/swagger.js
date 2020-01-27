@@ -16,9 +16,9 @@ module.exports = {
    * @param {resource} Resource is lower case
    */
   createRoute: function (resource) {
-
+    
     //plural
-    let route = pluralize.plural(resource);
+    let route = pluralize.plural(resource).toLowerCase();
 
     //first letter upper plural
     let tag = utils.toFirstCase(pluralize.plural(resource));
