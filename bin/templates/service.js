@@ -12,7 +12,7 @@ module.exports = {
     return `'use strict';
         
 const CommonService = require('./common.service');
-const ${resourceUpper}Model = require('../models/${resourceLower}.service');
+const ${resourceUpper}Model = require('../models/${resourceLower}.model');
 
 const { Contract } = require('../persistence/contract');
 const Exception = require('../../api/exceptions/exception');
