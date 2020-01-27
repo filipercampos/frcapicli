@@ -10,7 +10,8 @@ module.exports = {
     let resourceUpper = utils.toFirstCase(resource);
     var resourceLower = pluralize.singular(utils.toFirstCase(resource, false));
     return `'use strict';
-        
+const mssql = require('mssql');        
+
 const CommonService = require('./common.service');
 const ${resourceUpper}Model = require('../models/${resourceLower}.model');
 
@@ -24,7 +25,7 @@ module.exports = class ${resourceUpper}Service extends CommonService {
       super(
           ${resourceUpper}Model, 
           Contract.sp${resourceUpper}Get,
-          'pCodigo${resourceUpper}'
+          'p${resourceUpper}ID'
       );
     }
 
@@ -46,7 +47,7 @@ module.exports = class ${resourceUpper}Service extends CommonService {
         let conn = await this._factory.connectPool();
   
         let result = await conn.request()
-          .input('pCodigo${resourceUpper}', mssql.Int, params.id)
+          .input('p${resourceUpper}ID', mssql.Int, params.id)
           .input('p${resourceUpper}', mssql.VarChar(100), params.name)
           .input('pDate', mssql.DateTime, this.getDate(params.date))
           // .input('pCodigos', myTvp)
