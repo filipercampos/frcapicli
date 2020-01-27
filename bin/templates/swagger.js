@@ -87,10 +87,10 @@ module.exports = {
           description: Acesso Negado
           schema:
             $ref: '#/definitions/errorResponse'
-        "422":
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/error${resourceName}PostResponse'
+       #"422":
+       #  description: Unprocessable Entity
+       #  schema:
+       #    $ref: '#/definitions/error${resourceName}PostResponse'
               
   /${route}/{id}:
     x-swagger-router-controller: ${resource}Controller
@@ -169,46 +169,46 @@ module.exports = {
           schema:
             $ref: '#/definitions/errorResponse'
   
-    #${tag} #
-    get${tag}Response:
-      type: object
-      properties:
+  #${tag} #
+  get${tag}Response:
+    type: object
+    properties:
       data:
         type: array
         items:
-        $ref: '#/definitions/${resource}Response'
-    get${resourceName}Response:
-      type: object
-      properties:
+          $ref: '#/definitions/${resource}Response'
+  get${resourceName}Response:
+    type: object
+    properties:
       data:
         $ref: '#/definitions/${resource}Response'
-    ${resource}Response:
-        type: object
-        properties:
+  ${resource}Response:
+      type: object
+      properties:
         id:
           type: integer
           format: int64
-    
-    # ${tag} POST Request # 
-    post${resourceName}Request:
-      type: object
-      properties:
-        name:
-          type: string
-    
-    #${tag} PUT Request #
-    put${resourceName}Request:
-      type: object
-      properties:
-        name:
-          type: string    
-    
-    #${tag} PATCH Request #
-    patch${resourceName}Request:
-      type: object
-      properties:
-        name:
-          type: string        
+  
+  # ${tag} POST Request # 
+  post${resourceName}Request:
+    type: object
+    properties:
+      name:
+        type: string
+  
+  #${tag} PUT Request #
+  put${resourceName}Request:
+    type: object
+    properties:
+      name:
+        type: string    
+  
+  #${tag} PATCH Request #
+  patch${resourceName}Request:
+    type: object
+    properties:
+      name:
+        type: string        
         `;
 
     fs.appendFileSync(swaggerPath, dataRoute, 'utf-8');
@@ -226,7 +226,6 @@ module.exports = {
   createResponse: function (resource, response) {
 
     var letters = '/^[A-Za-z]+[0-9]+$/';
-    var numbers = /^[0-9]+$/;
 
     const swaggerPath = './app/api/swagger/swagger.yaml';
 
