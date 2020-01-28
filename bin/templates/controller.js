@@ -24,12 +24,18 @@ module.exports = class ${resourceUpper}Controller extends CommonController {
     //Specific method
     // async method(req, res) {
     //     try {
-    //         //data body
-    //         var body = req.body;
-    //         //realiza a requisica 
+    //         //params body
+    //         let body = req.body;
+    //         //params in query          
+    //         let params = req.swagger.params;
+    //         //params in path
+    //         let params = req.swagger.params.id.value;
+    //         //call request 
     //         let result = await this._service.method(body);
-    //         super.sendSucess(res, result);
+    //         //send success
+    //         super.sendSuccess(res, result);
     //     } catch (err) {
+    //         //send error
     //         super.sendError(res, err);
     //     }
     //}

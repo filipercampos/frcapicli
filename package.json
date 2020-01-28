@@ -1,6 +1,6 @@
 {
   "name": "frcbuild",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "author": "Filipe Rezende Campos",
   "description": "FRC API CLI cria e organiza as rotas de uma API CommonJS",
   "license": "MIT",
