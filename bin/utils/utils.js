@@ -4,8 +4,8 @@ const _ = require('lodash');
 module.exports = {
 
     toFirstCase: (text, upper = true) => {
-        var words = text.split(" ");
-        var w = words[0];
+        let words = text.split(" ");
+        let w = words[0];
 
         if (upper)
             words[0] = w[0].toUpperCase() + w.slice(1);
@@ -24,7 +24,7 @@ module.exports = {
         return Number(n) === n && n % 1 === 0;
     },
     isTimespan: (value) => {
-        var input = parseInt(value);
+        let input = parseInt(value);
 
         let result = isNaN(input)
             ? false

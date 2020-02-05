@@ -6,14 +6,15 @@ const utils = require('../utils/utils');
  */
 module.exports = {
     get: function (resource) {
-        var resourceUpper = pluralize.singular(utils.toFirstCase(resource));
+        let resourceUpper = pluralize.singular(utils.toFirstCase(resource));
+        let resourceLower = pluralize.singular(utils.toFirstCase(resource, false));
 
         return `'use strict';
         
 const HttpStatusCode = require('../helpers/httpStatusCode');
 
 const CommonController = require('./common.controller');
-const ${resourceUpper}Service = require('../../domain/services/${resource}.service');
+const ${resourceUpper}Service = require('../../domain/services/${resourceLower}.service');
 const CacheMiddleware = require('./cacheMiddleware');
 
 class ${resourceUpper}Controller extends CommonController {

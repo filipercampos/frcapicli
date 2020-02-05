@@ -8,7 +8,7 @@ module.exports = {
   get: function (resource) {
 
     let resourceUpper = utils.toFirstCase(resource);
-    var resourceLower = pluralize.singular(utils.toFirstCase(resource, false));
+    let resourceLower = pluralize.singular(utils.toFirstCase(resource, false));
     return `'use strict';
 const mssql = require('mssql');        
 
@@ -49,7 +49,7 @@ module.exports = class ${resourceUpper}Service extends CommonService {
         let result = await conn.request()
           .input('p${resourceUpper}ID', mssql.Int, params.id)
           .input('p${resourceUpper}', mssql.VarChar(100), params.name)
-          .input('pDate', mssql.DateTime, this.getDate(params.date))
+          .input('pDate', mssql.VarChar(10), this.getDate(params.date))
           // .input('pCodigos', myTvp)
           .execute(this._spGet.name);
   
@@ -94,7 +94,7 @@ module.exports = class ${resourceUpper}Service extends CommonService {
       try {
         let conn = await this._factory.connectPool();
         let result = await conn.request()
-          .input('pCodigo${resourceUpper}', mssql.Int, id)
+          .input('p${resourceUpper}ID', mssql.Int, id)
           .input('p${resourceUpper}Name', mssql.VarChar(100), params.name)
           .execute(Contract.sp${resourceUpper}Put);
   
@@ -119,7 +119,7 @@ module.exports = class ${resourceUpper}Service extends CommonService {
       try {
         let conn = await this._factory.connectPool();
         let result = await conn.request()  
-          .input('pCodigo${resourceUpper}', mssql.Int, id)
+          .input('p${resourceUpper}ID', mssql.Int, id)
           .input('p${resourceUpper}Name', mssql.VarChar(100), params.name)         
           .execute(Contract.sp${resourceUpper}Patch);
   
