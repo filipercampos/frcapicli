@@ -16,7 +16,7 @@ const CommonController = require('./common.controller');
 const ${resourceUpper}Service = require('../../domain/services/${resource}.service');
 const CacheMiddleware = require('./cacheMiddleware');
 
-module.exports = class ${resourceUpper}Controller extends CommonController {
+class ${resourceUpper}Controller extends CommonController {
     constructor() {
         super();
         this._service = new ${resourceUpper}Service();
