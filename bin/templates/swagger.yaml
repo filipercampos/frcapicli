@@ -224,50 +224,9 @@ definitions:
         type: string
       novaSenha:
         type: string
+# End Request
 
-# Responses # 
-
-  # Login
-  loginResponse:
-    properties:
-      token:
-        type: string
-        description: 'base64-encoded'
-
-  # Usuarios #
-  getUsuariosResponse:
-    type: object
-    properties:
-      data:
-        type: array
-        items:
-          $ref: '#/definitions/usuarioResponse'
-  getUsuarioResponse:
-    type: object
-    properties:
-      data:
-        $ref: '#/definitions/usuarioResponse'
-  usuarioResponse:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int64
-      nome:
-        type: string
-      dataNascimento:
-        type: integer
-        format: int64
-        description: 'Valor timestamp'
-      email:
-        type: string
-
-# enums
-  # myEnum:
-  #   type: string
-  #   enum: [ ..., ... ]
-  
-  # common #
+# Common Response #
   errorResponse:
     type: object
     properties:
@@ -315,11 +274,57 @@ definitions:
           insertId:
             type: integer
             format: int64
+# End Common Response #
 
-  #enum response => specific error
+# Responses # 
+
+  # Login
+  loginResponse:
+    properties:
+      token:
+        type: string
+        description: 'base64-encoded'
+
+  # Usuarios #
+  getUsuariosResponse:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/usuarioResponse'
+  getUsuarioResponse:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/usuarioResponse'
+  usuarioResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      nome:
+        type: string
+      dataNascimento:
+        type: integer
+        format: int64
+        description: 'Valor timestamp'
+      email:
+        type: string
+# End Response 
+
+
+
+# enums
+  # myEnum:
+  #   type: string
+  #   enum: [ ..., ... ]
+# enum response => specific error
   errorUsuarioPostResponse:
     type: object
     properties:
       message:
         type: string
-        enum: [ CPF_CADASTRADO, EMAIL_CADASTRADO, CELULAR_CADASTRADO ]             
+        enum: [ CPF_CADASTRADO, EMAIL_CADASTRADO, CELULAR_CADASTRADO ]     
+                

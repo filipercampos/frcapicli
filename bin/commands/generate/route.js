@@ -23,13 +23,13 @@ module.exports = class RouteHelper {
             const modelGenerate = require('../../templates/model');
 
             //controller
-            this._write('./app/api/controllers', controllerPath, controllerGenerate.get(name), `Controller '${name}'`)
+            this._write('./app/api/controllers', controllerPath, controllerGenerate.get(name), `Controller ${name}`)
 
             //service
-            this._write('./app/domain/services', servicePath, serviceGenerate.get(name), `Service '${name}'`)
+            this._write('./app/domain/services', servicePath, serviceGenerate.get(name), `Service ${name}`)
 
             //model
-            this._write('./app/domain/models', modelPath, modelGenerate.get(name), `Model '${name}'`)
+            this._write('./app/domain/models', modelPath, modelGenerate.get(name), `Model ${name}`)
 
             //swagger route
             swaggerGenerate.createRoute(name);

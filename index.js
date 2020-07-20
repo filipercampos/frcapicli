@@ -12,7 +12,7 @@ comandos
     .action(function (schematic, schematicName, json) {
 
         if (!schematicName) {
-            console.error("Resource name is not defined");
+            console.error("Resource name is not defined\nUse frcapi build 'route or swagger'");
         } else {
             let generateResource = new Route();
 

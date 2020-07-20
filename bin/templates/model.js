@@ -14,6 +14,7 @@ module.exports = {
     model: (entity) => {
         return {
             //set properties
+            data: entity.FieldName
         }
     }
 };`;

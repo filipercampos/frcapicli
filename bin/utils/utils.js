@@ -7,21 +7,12 @@ module.exports = {
         let words = text.split(" ");
         let w = words[0];
 
-        if (upper)
+        if (upper === true)
             words[0] = w[0].toUpperCase() + w.slice(1);
         else
             words[0] = w[0].toLowerCase() + w.slice(1);
 
         return words.join(" ");
-    },
-    isInt: (n) => {
-        return Number(n) === n && n % 1 === 0;
-    },
-    isFloat: (n) => {
-        return Number(n) === n && n % 1 !== 0;
-    },
-    isInt: (n) => {
-        return Number(n) === n && n % 1 === 0;
     },
     isTimespan: (value) => {
         let input = parseInt(value);

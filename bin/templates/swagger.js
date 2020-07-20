@@ -16,7 +16,7 @@ module.exports = {
    * @param {resource} Resource is lower case
    */
   createRoute: function (resource) {
-    
+
     //plural
     let route = pluralize.plural(resource).toLowerCase();
 
@@ -25,22 +25,27 @@ module.exports = {
 
     //first letter upper singular
     let resourceName = utils.toFirstCase(pluralize.singular(resource));
-
     const swaggerPath = path.join(`./app/api/swagger/swagger.yaml`);
+    let existSwagger = fs.existsSync(swaggerPath);
+    let create = false;
 
-    const swagger = fs.readFileSync(swaggerPath, 'utf8')
-    const data = swagger.replace(/\r/g, '').split('\n');
+    if (existSwagger === true) {
+      const swagger = fs.readFileSync(swaggerPath, 'utf8')
+      const data = swagger.replace(/\r/g, '').split('\n');
 
-
-    for (let i = 0; i < data.length; i++) {
-      const lineData = data[i];
-      if (lineData.includes(route)) {
-        console.warn(`Resource Swagger route '${resource}' already exists`);
-        return false;
+      for (let i = 0; i < data.length; i++) {
+        const lineData = data[i];
+        if (lineData.includes(route)) {
+          console.warn(`Resource Swagger route '${resource}' already exists`);
+          return false;
+        }
       }
+    } else {
+
+      //create swagger
+      this.createSwaggerDocs();
+      create = true;
     }
-    //create swagger
-    this.createSwaggerDocs();
 
     //create data route
     let dataRoute = `
@@ -211,11 +216,23 @@ module.exports = {
         type: string        
         `;
 
-    fs.appendFileSync(swaggerPath, dataRoute, 'utf-8');
-    console.log(`Swagger route ${resource} successfully added`);
+    if (create) {
+      fs.appendFileSync(swaggerPath, dataRoute, 'utf-8');
+      console.log(`Swagger route ${resource} successfully added`);
+    } else {
 
+      const swaggerPathTmp = path.join('./app/tmp/swagger/');
+      const swaggerPathRoute =  `${swaggerPathTmp}/swagger-${route}.yaml`;
+
+      if (!fs.existsSync(swaggerPathTmp)) {
+        fs.mkdirSync(swaggerPathTmp, { recursive: true });
+      }
+
+      fs.writeFileSync(swaggerPathRoute, dataRoute, 'utf-8');
+      console.log(`${swaggerPathRoute} successfully created`);
+      console.warn(`${swaggerPathRoute} must be removed e put on swagger.yaml`);
+    }
   },
-
 
   /**
    * Build swagger's properties response
@@ -276,7 +293,7 @@ module.exports = {
         isDecimal = isNaN(isInteger) ? false : value.includes('.');
         //teste o boolean
         isBoolean = isNaN(isInteger) ? value === 'true' || value === 'false' : false;
-        
+
         //define a precisao do decimal
         if (isDecimal) {
           realPrecision = value.split('.')[1].length;
@@ -350,7 +367,7 @@ module.exports = {
     let dir = './app/api/swagger';
 
     if (!fs.existsSync(dir)) {
-      console.log(`Creating directory ${dir} ...`);
+      console.log(`Creating swagger directory ${dir} ...`);
       fs.mkdirSync(dir, { recursive: true });
       console.log(`${dir} successfully created`);
     }
