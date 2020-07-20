@@ -1,4 +1,4 @@
-# frcapicli
+# frcbuild
 API CLI
 
 # Resources:
