@@ -1,10 +1,12 @@
 'use stric';
 const pluralize = require('pluralize');
 const fs = require('fs');
+const chalk = require('chalk');
 const path = require('path');
-const swaggerGenerate = require('../../templates/swagger');
+const swaggerGenerate = require('./swagger');
 
-module.exports = class RouteHelper {
+///All Commands
+module.exports = class Commander {
 
     create(name) {
         try {
@@ -13,20 +15,20 @@ module.exports = class RouteHelper {
 
             const resourceName = pluralize.singular(name);
 
-            const controllerPath = path.join(`./app/api/controllers/${resourceName}.controller.js`);
-            const controllerGenerate = require('../../templates/controller');
+            const controllerPath = path.join(`./app/controllers/${resourceName}.controller.js`);
+            const controllerGenerate = require('../templates/controller');
 
-            const servicePath = path.join(`./app/domain/services/${resourceName}.service.js`);
-            const serviceGenerate = require('../../templates/service');
+            const servicePath = path.join(`./app/services/${resourceName}.service.js`);
+            const serviceGenerate = require('../templates/service');
 
             const modelPath = path.join(`./app/domain/models/${resourceName}.model.js`);
-            const modelGenerate = require('../../templates/model');
+            const modelGenerate = require('../templates/model');
 
             //controller
-            this._write('./app/api/controllers', controllerPath, controllerGenerate.get(name), `Controller ${name}`)
+            this._write('./app/controllers', controllerPath, controllerGenerate.get(name), `Controller ${name}`)
 
             //service
-            this._write('./app/domain/services', servicePath, serviceGenerate.get(name), `Service ${name}`)
+            this._write('./app/services', servicePath, serviceGenerate.get(name), `Service ${name}`)
 
             //model
             this._write('./app/domain/models', modelPath, modelGenerate.get(name), `Model ${name}`)
@@ -37,13 +39,12 @@ module.exports = class RouteHelper {
         }
         catch (err) {
 
-            console.error(err.message);
+            console.error(chalk.red(err.message));
 
             var jsonStruct = `
                 app
-                    api
-                        controllers
-                        swagger
+                    controllers
+                    docs
                     domain
                         service
                         model
@@ -56,26 +57,26 @@ module.exports = class RouteHelper {
     _write(dir, path, resource, log) {
 
         if (!fs.existsSync(dir)) {
-            console.log(`Creating directory ${dir} ...`);
+            console.log(chalk.gray(`Creating directory ${dir} ...`));
             fs.mkdirSync(dir, { recursive: true });
-            console.log(`${dir} successfully created`);
+            console.log(chalk.gray(`${dir} successfully created`));
         }
 
         if (!fs.existsSync(path)) {
             fs.writeFileSync(path, resource, 'utf-8');
-            console.log(`${log} successfully created`);
+            console.log(chalk.green(`${log} successfully created`));
         }
         else {
-            console.error(`Resource '${log}' already exists`);
+            console.error(chalk.red(`Resource '${log}' already exists`));
         }
     }
 
     swaggerHelper(name, json) {
- 
+
         if (json !== undefined) {
             swaggerGenerate.createResponse(name, json);
         } else {
             swaggerGenerate.createRoute(name);
         }
-    } 
+    }
 }

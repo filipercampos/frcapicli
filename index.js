@@ -1,30 +1,41 @@
 #! /usr/bin/env node
-const comandos = require('commander');
-const Route = require('./bin/commands/generate/route');
+const comanders = require('commander');
+const commands = require('./bin/commands/index');
 
-comandos
-    .version('1.0.0')
+comanders
+    .version('1.0.8')
     .description('A command line interface for Node.js API');
 
-comandos
-    .command('build <schematics> <name> [json]')
-    .description('creates feature in controller, swagger, business and model layers')
+comanders
+    .command('g <schematics> <name> [json]')
+    .description('creates feature in service, controller, route and swagger')
     .action(function (schematic, schematicName, json) {
 
         if (!schematicName) {
-            console.error("Resource name is not defined\nUse frcapi build 'route or swagger'");
+            console.error("Resource name is not defined\nUse frc g schematic resource");
         } else {
-            let generateResource = new Route();
+            const Commander = require('./bin/commands/commander');
+            let generateResource = new Commander();
 
-            if (schematic === 'route') {
+            if (schematic === 'route') {//all commands
                 generateResource.create(schematicName);
+            }
+            else if (schematic === 'controller') {
+                new commands.ControllerCommand(schematicName).command();
+            }
+            else if (schematic === 'service') {
+                new commands.ServiceCommand(schematicName).command();
+            }
+            else if (schematic === 'model') {
+                new commands.ModelCommand(schematicName).command();
             }
             else if (schematic === 'swagger') {
                 generateResource.swaggerHelper(schematicName, json)
-            } else {
-                console.error(`Command ${schematic} invalid`);
+            }
+            else {
+                console.error(`Command ${schematic} invalid. Use g [controller, service, model, route, swagger]`);
             }
         }
     });
 
-comandos.parse(process.argv);
+comanders.parse(process.argv);

@@ -13,26 +13,17 @@ module.exports = {
 const mssql = require('mssql');        
 
 const CommonService = require('./common.service');
-const ${resourceUpper}Model = require('../models/${resourceLower}.model');
-
-const { Contract } = require('../persistence/contract');
 const Exception = require('../../api/exceptions/exception');
-const ProcedureException = require('../../api/exceptions/procedure.exception');
 
 
 module.exports = class ${resourceUpper}Service extends CommonService {
     constructor() {
-      super(
-          ${resourceUpper}Model, 
-          Contract.sp${resourceUpper}Get,
-          'p${resourceUpper}ID'
-      );
+      super();
     }
 
     /**
      * Recupera dados de ${resource}
      * 
-     * @param {Parâmetros da procedure} params 
      */
   
     async get(params) {

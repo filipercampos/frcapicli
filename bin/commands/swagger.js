@@ -4,6 +4,7 @@ const pluralize = require('pluralize');
 const utils = require('../utils/utils');
 const Exception = require('../exception');
 const _ = require('lodash');
+const chalk = require('chalk');
 
 /**
  * Template swagger route
@@ -25,7 +26,7 @@ module.exports = {
 
     //first letter upper singular
     let resourceName = utils.toFirstCase(pluralize.singular(resource));
-    const swaggerPath = path.join(`./app/api/swagger/swagger.yaml`);
+    const swaggerPath = path.join(`./app/docs/swagger.yaml`);
     let existSwagger = fs.existsSync(swaggerPath);
     let create = false;
 
@@ -218,19 +219,19 @@ module.exports = {
 
     if (create) {
       fs.appendFileSync(swaggerPath, dataRoute, 'utf-8');
-      console.log(`Swagger route ${resource} successfully added`);
+      console.log(chalk.green(`Swagger route ${resource} successfully added`));
     } else {
 
-      const swaggerPathTmp = path.join('./app/tmp/swagger/');
-      const swaggerPathRoute =  `${swaggerPathTmp}/swagger-${route}.yaml`;
+      const swaggerPathTmp = path.join('./tmp/swagger');
+      const swaggerPathRoute = path.join(swaggerPathTmp, `swagger-${route}.yaml`);
 
       if (!fs.existsSync(swaggerPathTmp)) {
         fs.mkdirSync(swaggerPathTmp, { recursive: true });
       }
 
       fs.writeFileSync(swaggerPathRoute, dataRoute, 'utf-8');
-      console.log(`${swaggerPathRoute} successfully created`);
-      console.warn(`${swaggerPathRoute} must be removed e put on swagger.yaml`);
+      console.log(chalk.green(`${swaggerPathRoute} successfully created`));
+      console.warn(chalk.yellow( `*** NOTE *** => ${swaggerPathRoute} must be add manually in swagger.yaml`));
     }
   },
 
@@ -244,7 +245,7 @@ module.exports = {
 
     var letters = '/^[A-Za-z]+[0-9]+$/';
 
-    const swaggerPath = './app/api/swagger/swagger.yaml';
+    const swaggerPath = './tmp/swagger/swagger.yaml';
 
     this.createSwaggerDocs();
 
@@ -354,7 +355,7 @@ module.exports = {
 
     fs.appendFile(swaggerPath, stringData, function (err) {
       if (err) throw new Exception("Build response fail.=>\n\t" + err);
-      console.log('Response swagger saved!');
+      console.log(chalk.green('Response swagger saved!'));
     });
 
   },
@@ -364,12 +365,12 @@ module.exports = {
    */
   createSwaggerDocs: function () {
 
-    let dir = './app/api/swagger';
+    let dir = './app/docs/swagger';
 
     if (!fs.existsSync(dir)) {
       console.log(`Creating swagger directory ${dir} ...`);
       fs.mkdirSync(dir, { recursive: true });
-      console.log(`${dir} successfully created`);
+      console.log(chalk.green(`${dir} successfully created`));
     }
 
     let swaggerPath = path.join(`${dir}/swagger.yaml`);
@@ -384,7 +385,7 @@ module.exports = {
           console.log(err);
           throw err;
         }
-        console.log(`Swagger-docs successfully created`);
+        console.log(chalk.green(`Swagger-docs successfully created`));
       });
     }
   }
