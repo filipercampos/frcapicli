@@ -3,12 +3,12 @@ const pluralize = require('pluralize');
 const fs = require('fs');
 const chalk = require('chalk');
 const path = require('path');
-const swaggerGenerate = require('./swagger');
+const swaggerGenerate = require('../utils/swagger.util');
 
 ///All Commands
 module.exports = class Commander {
 
-    create(name) {
+    build(name) {
         try {
 
             console.log("Building resources ...");
@@ -68,15 +68,6 @@ module.exports = class Commander {
         }
         else {
             console.error(chalk.red(`Resource '${log}' already exists`));
-        }
-    }
-
-    swaggerHelper(name, json) {
-
-        if (json !== undefined) {
-            swaggerGenerate.createResponse(name, json);
-        } else {
-            swaggerGenerate.createRoute(name);
         }
     }
 }

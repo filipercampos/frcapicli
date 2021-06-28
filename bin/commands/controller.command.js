@@ -30,7 +30,7 @@ module.exports = class ControllerCommand extends BaseCommand {
 
         }
         catch (err) {
-            console.error(chalk.red(' Falha na criação do controller'));
+            console.error(chalk.red('Falha na criação do controller'));
             console.error(chalk.red(err.message));
 
             const jsonStruct = `

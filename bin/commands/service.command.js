@@ -29,7 +29,7 @@ module.exports = class ServiceCommand extends BaseCommand {
 
         }
         catch (err) {
-            console.error(chalk.red(' Falha na criação do service'));
+            console.error(chalk.red('Falha na criação do service'));
             console.error(chalk.red(err.message));
             const jsonStruct = `
                 app

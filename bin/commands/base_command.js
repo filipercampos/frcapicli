@@ -11,6 +11,10 @@ module.exports = class BaseCommand {
         console.log(`Commando ${this._commandName} works !`);
     }
 
+    commandArgs(args) {
+        console.log(`Commando ${this._commandName} works with ${args} !`);
+    }
+
     generate(dir, path, resource, log) {
         if (!fs.existsSync(dir)) {
             console.log(chalk.gray(`Creating directory ${dir} ...`));

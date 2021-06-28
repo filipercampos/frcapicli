@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const pluralize = require('pluralize');
-const utils = require('../utils/utils');
+const utils = require('./utils');
 const Exception = require('../exception');
 const _ = require('lodash');
 const chalk = require('chalk');
@@ -231,7 +231,7 @@ module.exports = {
 
       fs.writeFileSync(swaggerPathRoute, dataRoute, 'utf-8');
       console.log(chalk.green(`${swaggerPathRoute} successfully created`));
-      console.warn(chalk.yellow( `*** NOTE *** => ${swaggerPathRoute} must be add manually in swagger.yaml`));
+      console.warn(chalk.yellow(`*** NOTE *** => ${swaggerPathRoute} must be add manually in swagger.yaml`));
     }
   },
 
@@ -245,7 +245,7 @@ module.exports = {
 
     var letters = '/^[A-Za-z]+[0-9]+$/';
 
-    const swaggerPath = './tmp/swagger/swagger.yaml';
+    const swaggerPath = './app/docs/swagger.yaml';
 
     this.createSwaggerDocs();
 
@@ -361,11 +361,11 @@ module.exports = {
   },
 
   /**
-   * Created swagger-docs
+   * Created swagger docs
    */
   createSwaggerDocs: function () {
 
-    let dir = './app/docs/swagger';
+    let dir = './app/docs';
 
     if (!fs.existsSync(dir)) {
       console.log(`Creating swagger directory ${dir} ...`);
@@ -378,7 +378,6 @@ module.exports = {
       console.log(`Creating swagger docs ${swaggerPath} ...`);
 
       const tarjet = path.join(`${__dirname}/swagger.yaml`);
-
       // destination.yaml will be created or overwritten by default.
       fs.copyFileSync(tarjet, swaggerPath, (err) => {
         if (err) {
