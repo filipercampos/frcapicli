@@ -6,10 +6,10 @@ const swaggerGenerate = require('../utils/swagger.util');
 /**
  * Generate swagger
  */
-module.exports = class SwaggerCommand extends BaseCommand {
+module.exports = class OpenApiCommand extends BaseCommand {
 
     constructor(schematic) {
-        super('swagger');
+        super('openapi');
         this._schematic = schematic;
     }
 
@@ -18,11 +18,11 @@ module.exports = class SwaggerCommand extends BaseCommand {
 
         if (json) {
             try {
-                console.log("Building swagger and response ...");
-                swaggerGenerate.createResponse(name, json, 'swagger');
+                console.log("Building openapi and response ...");
+                swaggerGenerate.createResponse(name, json, 'openapi');
             }
             catch (err) {
-                console.error(chalk.red(`Falha na criação do swagger ${err.message}`));
+                console.error(chalk.red(`Falha na criação do openapi ${err.message}`));
             }
         } else {
             this.command();
@@ -32,12 +32,11 @@ module.exports = class SwaggerCommand extends BaseCommand {
     command() {
         const name = this._schematic;
         try {
-
-            console.log("Building swagger route ...");
-            swaggerGenerate.createRoute(name, 'swagger');
+            console.log("Building openapi route ...");
+            swaggerGenerate.createRoute(name, 'openapi');
         }
         catch (err) {
-            console.error(chalk.red(`Falha na criação swagger ${err.message}`));
+            console.error(chalk.red(`Falha na criação openapi ${err.message}`));
         }
     }
 

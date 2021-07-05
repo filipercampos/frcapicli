@@ -1,25 +1,25 @@
 #! /usr/bin/env node
 const comanders = require('commander');
 const commands = require('./bin/commands/index');
+const swaggerUtil = require('./bin/utils/swagger.util');
+const chalk = require('chalk');
 
 comanders
     .version('1.0.8')
     .description('A command line interface for Node.js API');
 
 comanders
-    .command('generate <schematics> <name> [json]')
+    .command('generate <schematics> <name> [json, docType]')
     .alias('g')
-    .description('creates template: controller, service, model, route and swagger')
-    .action(function (schematic, schematicName, json) {
+    .description('creates template: controller, service, model, route and docs')
+    .action(function (schematic, schematicName, json, docType = 'openapi',) {
 
         if (!schematicName) {
             console.error("Resource name is not defined\nUse frc generate schematic resource");
         } else {
 
-            if (schematic === 'route') {
-                //all commands
-                const Commander = require('./bin/commands/commander');
-                new Commander().build(schematicName);
+            if (schematic === 'module') {
+                new commands.ModuleCommand(schematicName).command();
             }
             else if (schematic === 'controller') {
                 new commands.ControllerCommand(schematicName).command();
@@ -30,12 +30,22 @@ comanders
             else if (schematic === 'model') {
                 new commands.ModelCommand(schematicName).command();
             }
-            else if (schematic === 'swagger') {
-                new commands.SwaggerCommand(schematicName).commandArgs(json);
+            else if (schematic === 'docs') {
+                if (docType && !swaggerUtil.validateDocType(docType)) {
+                    console.error(chalk.red('docType invalid. use openapi or swagger'));
+                    return;
+                }
+
+                if (schematic === 'openapi') {
+                    new commands.OpenApiCommand(schematicName).commandArgs(json);
+                } else {
+                    new commands.SwaggerCommand(schematicName).commandArgs(json);
+                }
             }
             else {
-                console.error(`Command ${schematic} invalid. Use g [controller, service, model, route, swagger]`);
+                console.error(chalk.red(`Command ${schematic} invalid. Use frc g [controller, service, model, module or docs]`));
             }
+
         }
     });
 
@@ -46,10 +56,10 @@ comanders
     .action(function (schematic, path, type = "config", configName) {
 
         if (!path) {
-            console.error("Resource name is not defined\nUse frc l schematic <file>");
+            console.error(chalk.red("Resource name is not defined\nUse frc l schematic <file>"));
         }
         else if (!path) {
-            console.error("Specify file");
+            console.error(chalk.yellow("Specify file"));
         }
         else {
             const args = {
@@ -64,7 +74,7 @@ comanders
                 }
             }
             else {
-                console.error(`Command ${schematic} invalid. Use path and env (optional)`);
+                console.error(chalk.red(`Command ${schematic} invalid. Use frc l [ports path and env(optional)`));
             }
         }
     });

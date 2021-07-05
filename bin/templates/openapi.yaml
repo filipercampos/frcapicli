@@ -1,0 +1,326 @@
+openapi: 3.0.0
+info:
+  description: API Description
+  version: 1.0.0-oas3
+  title: API Title
+  contact:
+    email: email@domain.com
+tags:
+  - name: Usuarios
+paths:
+  /usuarios/login:
+    x-swagger-router-controller: usuario.controller
+    post:
+      tags:
+        - Usuarios
+      summary: Realiza o login do usuário
+      description: Recupera a token para acesso aos recursos da API
+      operationId: postLogin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/loginRequest'
+        description: Objeto JSON com os dados do login
+        required: true
+      responses:
+        '200':
+          description: Retorna o token de acesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/loginResponse'
+        default:
+          description: Erro
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+  /usuarios:
+    x-swagger-router-controller: usuario.controller
+    get:
+      tags:
+        - Usuarios
+      summary: Recupera dados de usuários
+      description: Recupera dados de usuários
+      operationId: getUsuarios
+      parameters:
+        - in: query
+          name: nome
+          schema:
+            type: string
+        - in: query
+          name: cpf
+          schema:
+            type: string
+        - in: query
+          name: email
+          schema:
+            type: string
+        - in: query
+          name: numeroPagina
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: linhasPagina
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getUsuariosResponse'
+        '403':
+          description: Acesso Negado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+    post:
+      tags:
+        - Usuarios
+      summary: Cadastro de usuário
+      description: Cadastro de usuário
+      operationId: postUsuario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/postUsuarioRequest'
+        required: true
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/postResponse'
+        '403':
+          description: Acesso Negado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorUsuarioPostResponse'
+  '/usuarios/{id}':
+    x-swagger-router-controller: usuario.controller
+    get:
+      tags:
+        - Usuarios
+      summary: Recupera dados do usuário
+      description: Recupera dados do usuário
+      operationId: getUsuario
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getUsuarioResponse'
+        '403':
+          description: Acesso Negado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+    put:
+      tags:
+        - Usuarios
+      summary: Atualiza os dados do usuário
+      description: Atualiza os dados do usuário
+      operationId: putUsuario
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/putUsuarioRequest'
+        description: Objeto JSON com os dados do usuário
+        required: true
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/putResponse'
+        '403':
+          description: Acesso Negado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+    patch:
+      tags:
+        - Usuarios
+      summary: Altera os dados do usuário
+      description: Altera os dados do usuário
+      operationId: patchUsuario
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/patchUsuarioRequest'
+        required: true
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/patchResponse'
+        '403':
+          description: Acesso Negado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+servers:
+  - url: 'http://localhost:8041/api/v1'
+components:
+  schemas:
+    loginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Nome de usuário ou email
+        password:
+          type: string
+    postUsuarioRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+        email:
+          type: string
+        senha:
+          type: string
+    putUsuarioRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+    patchUsuarioRequest:
+      type: object
+      properties:
+        senhaAtual:
+          type: string
+        novaSenha:
+          type: string
+    errorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    putResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            rowsAffected:
+              type: integer
+              format: int64
+            message:
+              type: string
+    postResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            insertId:
+              type: integer
+              format: int64
+            message:
+              type: string
+    patchResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            rowsAffected:
+              type: integer
+              format: int64
+            message:
+              type: string
+    deleteResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            insertId:
+              type: integer
+              format: int64
+    loginResponse:
+      properties:
+        token:
+          type: string
+          description: base64-encoded
+    getUsuariosResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/usuarioResponse'
+    getUsuarioResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/usuarioResponse'
+    usuarioResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+        dataNascimento:
+          type: integer
+          format: int64
+          description: Valor timestamp
+        email:
+          type: string
+    errorUsuarioPostResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - CPF_CADASTRADO
+            - EMAIL_CADASTRADO
+            - CELULAR_CADASTRADO

@@ -11,12 +11,19 @@ const chalk = require('chalk');
  */
 module.exports = {
 
+  validateDocType:function (docType) {
+    if (docType === 'open' || docType === 'swagger') {
+      return true;
+    }
+    return false;
+  },
+
   /**
    * Build swagger's route
    * 
    * @param {resource} Resource is lower case
    */
-  createRoute: function (resource) {
+  createRoute: function (resource, docType) {
 
     //plural
     let route = pluralize.plural(resource).toLowerCase();
@@ -26,7 +33,7 @@ module.exports = {
 
     //first letter upper singular
     let resourceName = utils.toFirstCase(pluralize.singular(resource));
-    const swaggerPath = path.join(`./app/docs/swagger.yaml`);
+    const swaggerPath = path.join(`./app/docs/${docType}.yaml`);
     let existSwagger = fs.existsSync(swaggerPath);
     let create = false;
 
@@ -44,7 +51,7 @@ module.exports = {
     } else {
 
       //create swagger
-      this.createSwaggerDocs();
+      this.createSwaggerDocs(docType);
       create = true;
     }
 
@@ -241,13 +248,13 @@ module.exports = {
    * @param {Resource name} resource 
    * @param {JSON response} response 
    */
-  createResponse: function (resource, response) {
+  createResponse: function (resource, response, docType = 'openapi') {
 
-    var letters = '/^[A-Za-z]+[0-9]+$/';
+    const letters = '/^[A-Za-z]+[0-9]+$/';
 
-    const swaggerPath = './app/docs/swagger.yaml';
+    const swaggerPath = `./app/docs/${docType}.yaml`;
 
-    this.createSwaggerDocs();
+    this.createSwaggerDocs(docType);
 
     const swagger = fs.readFileSync(swaggerPath, 'utf8')
     const data = swagger.replace(/\r/g, '').split('\n');
@@ -277,7 +284,6 @@ module.exports = {
       //todos os values do split
       for (let j = 1; j < f.length; j++) {
         value = value + f[j];
-        // console.warn(`${field}: ${value}\n`);
       }
       value = value.trim();
 
@@ -363,7 +369,7 @@ module.exports = {
   /**
    * Created swagger docs
    */
-  createSwaggerDocs: function () {
+  createSwaggerDocs: function (docType = 'openapi') {
 
     let dir = './app/docs';
 
@@ -377,7 +383,7 @@ module.exports = {
     if (!fs.existsSync(swaggerPath)) {
       console.log(`Creating swagger docs ${swaggerPath} ...`);
 
-      const tarjet = path.join(`${__dirname}/swagger.yaml`);
+      const tarjet = path.join(`${__dirname}/${docType}.yaml`);
       // destination.yaml will be created or overwritten by default.
       fs.copyFileSync(tarjet, swaggerPath, (err) => {
         if (err) {

@@ -4,14 +4,21 @@ const fs = require('fs');
 const chalk = require('chalk');
 const path = require('path');
 const swaggerGenerate = require('../utils/swagger.util');
+const BaseCommand = require('./base_command');
 
 ///All Commands
-module.exports = class Commander {
+module.exports = class ModuleCommand extends BaseCommand {
 
-    build(name) {
+    constructor(schematic) {
+        super('module');
+        this._schematic = schematic;
+    }
+
+    command() {
+        const name = this._schematic;
         try {
 
-            console.log("Building resources ...");
+            console.log("Building module ...");
 
             const resourceName = pluralize.singular(name);
 
