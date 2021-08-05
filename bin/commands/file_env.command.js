@@ -20,7 +20,7 @@ module.exports = class FileEnvCommand extends BaseCommand {
     async commandArgs(args) {
         try {
             const tarjet = this._schematic;
-            console.log("Scanning directory to list port .env ...");
+            console.log(chalk.magenta("Scanning directory to list port .env ..."));
             let nothing = 0;
             const ports = [];
             const dirs = await fileUtil.readDirectory(tarjet);

@@ -11,8 +11,8 @@ const chalk = require('chalk');
  */
 module.exports = {
 
-  validateDocType:function (docType) {
-    if (docType === 'open' || docType === 'swagger') {
+  validateDocType: function (docType) {
+    if (docType === 'openapi' || docType === 'swagger') {
       return true;
     }
     return false;
@@ -24,7 +24,6 @@ module.exports = {
    * @param {resource} Resource is lower case
    */
   createRoute: function (resource, docType) {
-
     //plural
     let route = pluralize.plural(resource).toLowerCase();
 
@@ -33,23 +32,23 @@ module.exports = {
 
     //first letter upper singular
     let resourceName = utils.toFirstCase(pluralize.singular(resource));
-    const swaggerPath = path.join(`./app/docs/${docType}.yaml`);
+    const swaggerPath = path.join(`./src/app/docs/${docType}.yaml`);
     let existSwagger = fs.existsSync(swaggerPath);
     let create = false;
 
+
     if (existSwagger === true) {
-      const swagger = fs.readFileSync(swaggerPath, 'utf8')
+      const swagger = fs.readFileSync(swaggerPath, 'utf8');
       const data = swagger.replace(/\r/g, '').split('\n');
 
       for (let i = 0; i < data.length; i++) {
         const lineData = data[i];
         if (lineData.includes(route)) {
-          console.warn(`Resource Swagger route '${resource}' already exists`);
+          console.warn(chalk.yellow(`Swagger route '${resource}' already exists`));
           return false;
         }
       }
     } else {
-
       //create swagger
       this.createSwaggerDocs(docType);
       create = true;
@@ -371,27 +370,30 @@ module.exports = {
    */
   createSwaggerDocs: function (docType = 'openapi') {
 
-    let dir = './app/docs';
-
+    const dir = './src/app/docs';
     if (!fs.existsSync(dir)) {
       console.log(`Creating swagger directory ${dir} ...`);
       fs.mkdirSync(dir, { recursive: true });
       console.log(chalk.green(`${dir} successfully created`));
     }
+    
+    const swaggerPath = path.join(`${dir}/${docType}.yaml`);
 
-    let swaggerPath = path.join(`${dir}/swagger.yaml`);
     if (!fs.existsSync(swaggerPath)) {
       console.log(`Creating swagger docs ${swaggerPath} ...`);
 
-      const tarjet = path.join(`${__dirname}/${docType}.yaml`);
+      const tarjet = path.join(`${__dirname}/../templates/${docType}.yaml`);
       // destination.yaml will be created or overwritten by default.
-      fs.copyFileSync(tarjet, swaggerPath, (err) => {
-        if (err) {
-          console.log(err);
-          throw err;
-        }
-        console.log(chalk.green(`Swagger-docs successfully created`));
-      });
+      fs.copyFileSync(tarjet, swaggerPath);
+      console.log(chalk.green(`API docs successfully created`));
+
+      // fs.copyFile(tarjet, swaggerPath, (err) => {
+      //   if (err) {
+      //     console.log(err);
+      //     throw err;
+      //   }
+      //   console.log(chalk.green(`API docs successfully created`));
+      // });
     }
   }
 

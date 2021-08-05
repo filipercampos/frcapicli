@@ -15,7 +15,7 @@ module.exports = class BaseCommand {
         console.log(`Commando ${this._commandName} works with ${args} !`);
     }
 
-    generate(dir, path, resource, log) {
+    generate(dir, path, data, log) {
         if (!fs.existsSync(dir)) {
             console.log(chalk.gray(`Creating directory ${dir} ...`));
             fs.mkdirSync(dir, { recursive: true });
@@ -23,11 +23,21 @@ module.exports = class BaseCommand {
         }
 
         if (!fs.existsSync(path)) {
-            fs.writeFileSync(path, resource, 'utf-8');
+            fs.writeFileSync(path, data, 'utf-8');
             console.log(chalk.green(`${log} successfully created`));
         }
         else {
             console.log(chalk.red(`Resource '${log}' already exists`));
         }
+    }
+
+    trace(message) {
+        console.log(chalk.magenta(message));
+    }
+    warn(message) {
+        console.log(chalk.yellow(message));
+    }
+    error(message) {
+        console.log(chalk.red(message));
     }
 }

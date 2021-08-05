@@ -9,11 +9,10 @@ comanders
     .description('A command line interface for Node.js API');
 
 comanders
-    .command('generate <schematics> <name> [json, docType]')
+    .command('generate <schematics> <name> [docType] [json]')
     .alias('g')
-    .description('creates template: controller, service, model, route and docs')
-    .action(function (schematic, schematicName, json, docType = 'openapi',) {
-
+    .description('creates template: controller, model, dto, lib, module or docs')
+    .action(function (schematic, schematicName, docType, json) {
         if (!schematicName) {
             console.error("Resource name is not defined\nUse frc generate schematic resource");
         } else {
@@ -24,22 +23,27 @@ comanders
             else if (schematic === 'controller') {
                 new commands.ControllerCommand(schematicName).command();
             }
-            else if (schematic === 'service') {
-                new commands.ServiceCommand(schematicName).command();
+            else if (schematic === 'repository') {
+                new commands.RepositoryCommand(schematicName).command();
             }
             else if (schematic === 'model') {
                 new commands.ModelCommand(schematicName).command();
+            }
+            else if (schematic === 'dto') {
+                new commands.DtoCommand(schematicName).command();
+            }
+            else if (schematic === 'lib') {
+                new commands.ServiceCommand(schematicName).command();
             }
             else if (schematic === 'docs') {
                 if (docType && !swaggerUtil.validateDocType(docType)) {
                     console.error(chalk.red('docType invalid. use openapi or swagger'));
                     return;
                 }
-
-                if (schematic === 'openapi') {
-                    new commands.OpenApiCommand(schematicName).commandArgs(json);
-                } else {
+                if (docType === 'swagger') {
                     new commands.SwaggerCommand(schematicName).commandArgs(json);
+                } else {
+                    new commands.OpenApiCommand(schematicName).commandArgs(json);
                 }
             }
             else {
@@ -47,7 +51,17 @@ comanders
             }
 
         }
-    });
+    })
+    .on('--help', () => {
+
+        const table = [
+            {
+                name: 'model',
+                description: 'Generate a new model'
+            }
+        ];
+        console.table(table);
+    });;
 
 comanders
     .command('list <schematics> <path> [type] [configName]')

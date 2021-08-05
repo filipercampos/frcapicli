@@ -5,33 +5,33 @@ const path = require('path');
 const BaseCommand = require('./base_command');
 
 /**
- * Generate model
+ * Generate dto
  */
-module.exports = class ModelCommand extends BaseCommand {
+module.exports = class DtoCommand extends BaseCommand {
 
     constructor(schematic) {
-        super('model');
+        super('dto');
         this._schematic = schematic;
     }
 
     command() {
         const name = this._schematic;
         try {
-
-            console.log(chalk.magenta("Building model ..."));
+            console.log(chalk.magenta("Building dto ..."));
             const resourceName = pluralize.singular(name);
-            const modelPath = path.join(`./src/app/domain/models/${resourceName}.model.js`);
-            const modelGenerate = require('../templates/model');
-            //model
-            this.generate('./src/app/domain/models', modelPath, modelGenerate(name), `Model ${name}`)
+            const dtoPath = path.join(`./src/app/domain/dto/${resourceName}.dto.js`);
+            const dtoGenerate = require('../templates/dto');
+            //dto
+            this.generate('./src/app/domain/dto', dtoPath, dtoGenerate.get(name), `DTO ${name}`)
         }
         catch (err) {
-            console.error(chalk.red(`Falha na criação do model ${err.message}`));
+            console.error(chalk.red(`Falha na criação do dto ${err.message}`));
             const jsonStruct = `
                 src
                     app
                         domain
-                            models
+                            dto
+                            dtos
                             repositories
                 `;
             console.log(chalk.yellow(`Verifique se estrutura da api está no padrão:\n ${jsonStruct}`));

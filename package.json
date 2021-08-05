@@ -6,10 +6,12 @@
   "license": "MIT",
   "main": "index.js",
   "keywords": [
-    "service",
     "controller",
-    "route",
-    "swagger"
+    "model",
+    "dto",
+    "lib",
+    "module",
+    "docs"
   ],
   "bin": {
     "frc": "index.js"

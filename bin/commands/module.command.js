@@ -18,30 +18,30 @@ module.exports = class ModuleCommand extends BaseCommand {
         const name = this._schematic;
         try {
 
-            console.log("Building module ...");
+            console.log(chalk.magenta("Building module ..."));
 
             const resourceName = pluralize.singular(name);
 
-            const controllerPath = path.join(`./app/controllers/${resourceName}.controller.js`);
+            const controllerPath = path.join(`./src/app/controllers/${resourceName}.controller.js`);
             const controllerGenerate = require('../templates/controller');
 
-            const servicePath = path.join(`./app/services/${resourceName}.service.js`);
-            const serviceGenerate = require('../templates/service');
+            // const servicePath = path.join(`./src/libs/${resourceName}/${resourceName}.service.js`);
+            // const serviceGenerate = require('../templates/service');
 
-            const modelPath = path.join(`./app/domain/models/${resourceName}.model.js`);
+            const modelPath = path.join(`./src/app/domain/models/${resourceName}.model.js`);
             const modelGenerate = require('../templates/model');
 
             //controller
-            this._write('./app/controllers', controllerPath, controllerGenerate.get(name), `Controller ${name}`)
+            this._write('./src/app/controllers', controllerPath, controllerGenerate.get(name), `Controller ${name}`)
 
-            //service
-            this._write('./app/services', servicePath, serviceGenerate.get(name), `Service ${name}`)
+            //lib
+            // this._write(`./src/libs/${resourceName}/`, servicePath, serviceGenerate.get(name), `Service ${name}`)
 
             //model
-            this._write('./app/domain/models', modelPath, modelGenerate.get(name), `Model ${name}`)
+            this._write('./src/app/domain/models', modelPath, modelGenerate.get(name), `Model ${name}`)
 
             //swagger route
-            swaggerGenerate.createRoute(name);
+            swaggerGenerate.createRoute(name, 'openapi');
 
         }
         catch (err) {
@@ -49,12 +49,17 @@ module.exports = class ModuleCommand extends BaseCommand {
             console.error(chalk.red(err.message));
 
             var jsonStruct = `
-                app
-                    controllers
-                    docs
-                    domain
-                        service
-                        model
+                src
+                    app
+                        controllers
+                        docs
+                        domain
+                            models
+                            repositories
+                        routes
+                    infra
+                    libs
+                    main
                 `;
 
             console.log(`Verifique se estrutura da api está no padrão:\n ${jsonStruct}`);

@@ -18,11 +18,11 @@ module.exports = class ControllerCommand extends BaseCommand {
         try {
             const name = this._schematic;
 
-            console.log("Building controller ...");
+            console.log(chalk.magenta("Building controller ..."));
 
             const resourceName = pluralize.singular(name);
 
-            const controllerPath = path.join(`./app/controllers/${resourceName}.controller.js`);
+            const controllerPath = path.join(`./src/app/controllers/${resourceName}.controller.js`);
             const controllerGenerate = require('../templates/controller');
 
             //controller

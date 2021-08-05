@@ -1,8 +1,10 @@
 module.exports = {
     ModuleCommand: require("./module.command"),
     ControllerCommand: require("./controller.command"),
+    RepositoryCommand: require("./repository.command"),
     ServiceCommand: require("./service.command"),
     ModelCommand: require("./model.command"),
+    DtoCommand: require("./dto.command"),
     SwaggerCommand: require("./swagger.command"),
     OpenApiCommand: require("./openapi.command"),
     FileConfigCommand: require("./file_config.command"),

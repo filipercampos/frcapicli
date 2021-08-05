@@ -18,14 +18,14 @@ module.exports = class ServiceCommand extends BaseCommand {
         const name = this._schematic;
         try {
 
-            console.log("Building service ...");
+            console.log(chalk.magenta("Building service ..."));
 
             const resourceName = pluralize.singular(name);
-            const servicePath = path.join(`./app/domain/services/${resourceName}.service.js`);
+            const servicePath = path.join(`./src/libs/${resourceName}/${resourceName}.service.js`);
             const serviceGenerate = require('../templates/service');
 
             //service
-            this.generate('./app/domain/services', servicePath, serviceGenerate.get(name), `Service ${name}`)
+            this.generate(`./src/libs/${resourceName}`, servicePath, serviceGenerate.get(name), `Service ${name}`)
 
         }
         catch (err) {
@@ -33,7 +33,7 @@ module.exports = class ServiceCommand extends BaseCommand {
             console.error(chalk.red(err.message));
             const jsonStruct = `
                 app
-                    service
+                    libs
                 `;
             console.log(chalk.yellow(`Verifique se estrutura da api está no padrão:\n ${jsonStruct}`));
         }

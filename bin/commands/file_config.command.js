@@ -20,7 +20,7 @@ module.exports = class FileConfigCommand extends BaseCommand {
      */
     async commandArgs(args) {
         try {
-            console.log("Scanning directory to list port config ...");
+            console.log(chalk.magenta("Scanning directory to list port config ..."));
             let nothing = 0;
             const tarjet = this._schematic;
             const configName = args.configName != null ? args.configName : 'production.json';

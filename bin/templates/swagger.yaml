@@ -326,5 +326,4 @@ definitions:
     properties:
       message:
         type: string
-        enum: [ CPF_CADASTRADO, EMAIL_CADASTRADO, CELULAR_CADASTRADO ]     
-                
+        enum: [ CPF_CADASTRADO, EMAIL_CADASTRADO, CELULAR_CADASTRADO ]                     

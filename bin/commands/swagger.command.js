@@ -18,7 +18,7 @@ module.exports = class SwaggerCommand extends BaseCommand {
 
         if (json) {
             try {
-                console.log("Building swagger and response ...");
+                console.log(chalk.magenta("Building swagger and response ..."));
                 swaggerGenerate.createResponse(name, json, 'swagger');
             }
             catch (err) {
@@ -29,11 +29,12 @@ module.exports = class SwaggerCommand extends BaseCommand {
         }
     }
 
+    //docType => openApi
     command() {
         const name = this._schematic;
         try {
 
-            console.log("Building swagger route ...");
+            console.log(chalk.magenta("Building swagger route ..."));
             swaggerGenerate.createRoute(name, 'swagger');
         }
         catch (err) {
