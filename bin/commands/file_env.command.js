@@ -40,7 +40,7 @@ module.exports = class FileEnvCommand extends BaseCommand {
                         }
                         const e = {
                             api: dirs[i],
-                            host: config.HOST ? config.HOST : 'Nao definido',
+                            host: config.HOST ? config.HOST : 'Not defined',
                             port: config.PORT
                         }
                         ports.push(e);
@@ -50,14 +50,14 @@ module.exports = class FileEnvCommand extends BaseCommand {
             }
 
             if (nothing === 0) {
-                console.log(chalk.red('Nenhum configuração encontrada em\n' + tarjet));
+                console.log(chalk.red('No config file found\n' + tarjet));
             } else {
                 console.log('Configuração de Portas');
                 console.table(ports);
             }
         }
         catch (err) {
-            console.error(chalk.red('Falha ao listar portas'));
+            console.error(chalk.red('Fail list ports'));
             console.error(chalk.red(err.message));
         }
     }

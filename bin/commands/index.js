@@ -1,6 +1,7 @@
 module.exports = {
     ModuleCommand: require("./module.command"),
     ControllerCommand: require("./controller.command"),
+    RouteCommand: require("./route.command"),
     RepositoryCommand: require("./repository.command"),
     ServiceCommand: require("./service.command"),
     ModelCommand: require("./model.command"),

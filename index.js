@@ -3,6 +3,7 @@ const comanders = require('commander');
 const commands = require('./bin/commands/index');
 const swaggerUtil = require('./bin/utils/swagger.util');
 const chalk = require('chalk');
+const CommandConst = require('./bin/constants/command.const');
 
 comanders
     .version('1.0.8')
@@ -17,30 +18,33 @@ comanders
             console.error("Resource name is not defined\nUse frc generate schematic resource");
         } else {
 
-            if (schematic === 'module') {
+            if (schematic === CommandConst.MODULE) {
                 new commands.ModuleCommand(schematicName).command();
             }
-            else if (schematic === 'controller') {
+            else if (schematic === CommandConst.CONTROLLER) {
                 new commands.ControllerCommand(schematicName).command();
             }
-            else if (schematic === 'repository') {
+            else if (schematic === CommandConst.ROUTE) {
+                new commands.RouteCommand(schematicName).command();
+            }
+            else if (schematic === CommandConst.REPOSITORY) {
                 new commands.RepositoryCommand(schematicName).command();
             }
-            else if (schematic === 'model') {
+            else if (schematic === CommandConst.MODEL) {
                 new commands.ModelCommand(schematicName).command();
             }
-            else if (schematic === 'dto') {
+            else if (schematic === CommandConst.DTO) {
                 new commands.DtoCommand(schematicName).command();
             }
-            else if (schematic === 'lib') {
+            else if (schematic === CommandConst.LIB) {
                 new commands.ServiceCommand(schematicName).command();
             }
-            else if (schematic === 'docs') {
+            else if (schematic === CommandConst.DOCS) {
                 if (docType && !swaggerUtil.validateDocType(docType)) {
                     console.error(chalk.red('docType invalid. use openapi or swagger'));
                     return;
                 }
-                if (docType === 'swagger') {
+                if (docType === CommandConst.DOC_TYPE_SWAGGER) {
                     new commands.SwaggerCommand(schematicName).commandArgs(json);
                 } else {
                     new commands.OpenApiCommand(schematicName).commandArgs(json);
@@ -51,17 +55,8 @@ comanders
             }
 
         }
-    })
-    .on('--help', () => {
+    });
 
-        const table = [
-            {
-                name: 'model',
-                description: 'Generate a new model'
-            }
-        ];
-        console.table(table);
-    });;
 
 comanders
     .command('list <schematics> <path> [type] [configName]')
@@ -80,7 +75,7 @@ comanders
                 configName: configName || null
             };
 
-            if (schematic === 'ports') {
+            if (schematic === CommandConst.PORTS) {
                 if (type && type === 'env') {
                     new commands.FileEnvCommand(path).commandArgs(args);
                 } else {
@@ -93,4 +88,46 @@ comanders
         }
     });
 
+comanders
+    .command('help')
+    .alias('h')
+    .action(function () {
+
+        const table = [
+            {
+                name: 'controller',
+                description: 'Generate a new model'
+            },
+            {
+                name: 'repository',
+                description: 'Generate a new model'
+            },
+            {
+                name: 'route',
+                description: 'Generate a new route'
+            },
+            {
+                name: 'model',
+                description: 'Generate a new model mongoose'
+            },
+            {
+                name: 'dto',
+                description: 'Generate a new dto'
+            },
+            {
+                name: 'module',
+                description: 'Generate a new module'
+            },
+            {
+                name: 'lib',
+                description: 'Generate a new lib'
+            },
+            {
+                name: 'docs',
+                description: 'Generate a route/response swagger'
+            },
+        ];
+        console.table(table);
+        console.table([{ name: 1, alias: 'name lis' }]);
+    });
 comanders.parse(process.argv);

@@ -225,7 +225,7 @@ module.exports = {
 
     if (create) {
       fs.appendFileSync(swaggerPath, dataRoute, 'utf-8');
-      console.log(chalk.green(`Swagger route ${resource} successfully added`));
+      console.log(chalk.green(`Swagger route '${resource}' successfully added`));
     } else {
 
       const swaggerPathTmp = path.join('./tmp/swagger');
@@ -372,7 +372,7 @@ module.exports = {
 
     const dir = './src/app/docs';
     if (!fs.existsSync(dir)) {
-      console.log(`Creating swagger directory ${dir} ...`);
+      console.log(chalk.gray(`Creating swagger directory ${dir} ...`));
       fs.mkdirSync(dir, { recursive: true });
       console.log(chalk.green(`${dir} successfully created`));
     }
@@ -380,7 +380,7 @@ module.exports = {
     const swaggerPath = path.join(`${dir}/${docType}.yaml`);
 
     if (!fs.existsSync(swaggerPath)) {
-      console.log(`Creating swagger docs ${swaggerPath} ...`);
+      console.log(chalk.gray(`Creating swagger docs ${swaggerPath} ...`));
 
       const tarjet = path.join(`${__dirname}/../templates/${docType}.yaml`);
       // destination.yaml will be created or overwritten by default.

@@ -2,6 +2,7 @@
 const chalk = require('chalk');
 const BaseCommand = require('./base_command');
 const swaggerGenerate = require('../utils/swagger.util');
+const { DOC_TYPE_OPENAPI } = require('../constants/command.const');
 
 /**
  * Generate swagger
@@ -19,7 +20,7 @@ module.exports = class OpenApiCommand extends BaseCommand {
         if (json) {
             try {
                 console.log(chalk.magenta("Building docs and response ..."));
-                swaggerGenerate.createResponse(name, json, 'openapi');
+                swaggerGenerate.createResponse(name, json, DOC_TYPE_OPENAPI);
             }
             catch (err) {
                 console.error(chalk.red(`Falha na criação do openapi ${err.message}`));
@@ -33,7 +34,7 @@ module.exports = class OpenApiCommand extends BaseCommand {
         const name = this._schematic;
         try {
             console.log("Building docs route ...");
-            swaggerGenerate.createRoute(name, 'openapi');
+            swaggerGenerate.createRoute(name, DOC_TYPE_OPENAPI);
         }
         catch (err) {
             console.error(chalk.red(`Falha na criação openapi ${err.message}`));

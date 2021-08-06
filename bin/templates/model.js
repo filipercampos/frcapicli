@@ -3,8 +3,9 @@ const Utils = require('../utils/utils');
 /**
  * Template data model response
  */
-module.exports = resource => {
-    return `'use strict';
+module.exports = {
+    get: function (resource) {
+        return `'use strict';
 const mongoose = require('../../../infra/database');
 const { BcryptUtil } = require('../../common/utils');
 // or add your collection name here
@@ -39,8 +40,7 @@ UsuarioSchema.pre('save', async function (next) {
 const ${Utils.toFirstCase(resource)} = mongoose.model('${resource.toLowerCase()}', UsuarioSchema);
 
 module.exports = ${Utils.toFirstCase(resource)};`;
-}
+    }
 
-
-
+};
 

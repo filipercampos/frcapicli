@@ -23,10 +23,10 @@ module.exports = class ModelCommand extends BaseCommand {
             const modelPath = path.join(`./src/app/domain/models/${resourceName}.model.js`);
             const modelGenerate = require('../templates/model');
             //model
-            this.generate('./src/app/domain/models', modelPath, modelGenerate(name), `Model ${name}`)
+            this.generate('./src/app/domain/models', modelPath, modelGenerate.get(name), `Model ${name}`)
         }
         catch (err) {
-            console.error(chalk.red(`Falha na criação do model ${err.message}`));
+            console.error(chalk.red(`Fail create model ${err.message}`));
             const jsonStruct = `
                 src
                     app
@@ -34,7 +34,7 @@ module.exports = class ModelCommand extends BaseCommand {
                             models
                             repositories
                 `;
-            console.log(chalk.yellow(`Verifique se estrutura da api está no padrão:\n ${jsonStruct}`));
+            console.log(chalk.yellow(`Check API struct:\n ${jsonStruct}`));
         }
     }
 

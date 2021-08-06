@@ -47,14 +47,14 @@ module.exports = class FileConfigCommand extends BaseCommand {
             }
 
             if (nothing === 0) {
-                console.log(chalk.red('Nenhum arquivo de configuração encontrado'));
+                console.log(chalk.red('No config file found'));
             } else {
-                console.log('Configuração de Portas');
+                console.log('Configution Port');
                 console.table(ports);
             }
         }
         catch (err) {
-            console.error(chalk.red('Falha ao listar portas'));
+            console.error(chalk.red('Fail to list ports'));
             console.error(chalk.red(err.message));
         }
     }
@@ -65,14 +65,12 @@ module.exports = class FileConfigCommand extends BaseCommand {
             fileUtil.readDirectory()
             console.log("Run list port API ...");
 
-
-
             //controller
             console.table(log);
 
         }
         catch (err) {
-            console.error(chalk.red('Falha ao listar portas'));
+            console.error(chalk.red('Fail list config'));
             console.error(chalk.red(err.message));
         }
     }

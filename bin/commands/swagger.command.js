@@ -2,6 +2,7 @@
 const chalk = require('chalk');
 const BaseCommand = require('./base_command');
 const swaggerGenerate = require('../utils/swagger.util');
+const { DOC_TYPE_SWAGGER } = require('../constants/command.const');
 
 /**
  * Generate swagger
@@ -19,7 +20,7 @@ module.exports = class SwaggerCommand extends BaseCommand {
         if (json) {
             try {
                 console.log(chalk.magenta("Building swagger and response ..."));
-                swaggerGenerate.createResponse(name, json, 'swagger');
+                swaggerGenerate.createResponse(name, json, DOC_TYPE_SWAGGER);
             }
             catch (err) {
                 console.error(chalk.red(`Falha na criação do swagger ${err.message}`));
@@ -29,13 +30,12 @@ module.exports = class SwaggerCommand extends BaseCommand {
         }
     }
 
-    //docType => openApi
     command() {
         const name = this._schematic;
         try {
 
             console.log(chalk.magenta("Building swagger route ..."));
-            swaggerGenerate.createRoute(name, 'swagger');
+            swaggerGenerate.createRoute(name, DOC_TYPE_SWAGGER);
         }
         catch (err) {
             console.error(chalk.red(`Falha na criação swagger ${err.message}`));

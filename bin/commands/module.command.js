@@ -3,7 +3,7 @@ const pluralize = require('pluralize');
 const fs = require('fs');
 const chalk = require('chalk');
 const path = require('path');
-const swaggerGenerate = require('../utils/swagger.util');
+const SwaggerUtil = require('../utils/swagger.util');
 const BaseCommand = require('./base_command');
 
 ///All Commands
@@ -25,23 +25,27 @@ module.exports = class ModuleCommand extends BaseCommand {
             const controllerPath = path.join(`./src/app/controllers/${resourceName}.controller.js`);
             const controllerGenerate = require('../templates/controller');
 
-            // const servicePath = path.join(`./src/libs/${resourceName}/${resourceName}.service.js`);
-            // const serviceGenerate = require('../templates/service');
+            const routePath = path.join(`./src/app/routes/${resourceName}.route.js`);
+            const routeGenerate = require('../templates/route');
 
             const modelPath = path.join(`./src/app/domain/models/${resourceName}.model.js`);
             const modelGenerate = require('../templates/model');
 
             //controller
-            this._write('./src/app/controllers', controllerPath, controllerGenerate.get(name), `Controller ${name}`)
+            this._write('./src/app/controllers', controllerPath, controllerGenerate.get(name), `Controller ${name}`);
+            
+            //route
+            this._write('./src/app/routes', routePath, routeGenerate.get(name), `Route ${name}`);
 
+            
+            //model
+            this._write('./src/app/domain/models', modelPath, modelGenerate.get(name), `Model ${name}`);
+            
             //lib
             // this._write(`./src/libs/${resourceName}/`, servicePath, serviceGenerate.get(name), `Service ${name}`)
-
-            //model
-            this._write('./src/app/domain/models', modelPath, modelGenerate.get(name), `Model ${name}`)
-
+            
             //swagger route
-            swaggerGenerate.createRoute(name, 'openapi');
+            SwaggerUtil.createRoute(name, 'openapi');
 
         }
         catch (err) {
@@ -62,7 +66,7 @@ module.exports = class ModuleCommand extends BaseCommand {
                     main
                 `;
 
-            console.log(`Verifique se estrutura da api está no padrão:\n ${jsonStruct}`);
+            console.log(chalk.yellow(`Check API struct:\n ${jsonStruct}`));
         }
     }
 
@@ -71,7 +75,7 @@ module.exports = class ModuleCommand extends BaseCommand {
         if (!fs.existsSync(dir)) {
             console.log(chalk.gray(`Creating directory ${dir} ...`));
             fs.mkdirSync(dir, { recursive: true });
-            console.log(chalk.gray(`${dir} successfully created`));
+            // console.log(chalk.gray(`${dir} successfully created`));
         }
 
         if (!fs.existsSync(path)) {

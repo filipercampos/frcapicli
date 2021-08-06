@@ -26,11 +26,11 @@ module.exports = class ControllerCommand extends BaseCommand {
             const controllerGenerate = require('../templates/controller');
 
             //controller
-            this.generate('./app/controllers', controllerPath, controllerGenerate.get(name), `Controller ${name}`)
+            this.generate('./src/app/controllers', controllerPath, controllerGenerate.get(name), `Controller ${name}`)
 
         }
         catch (err) {
-            console.error(chalk.red('Falha na criação do controller'));
+            console.error(chalk.red('Fail create controller'));
             console.error(chalk.red(err.message));
 
             const jsonStruct = `
@@ -38,7 +38,7 @@ module.exports = class ControllerCommand extends BaseCommand {
                     api
                         controllers
                 `;
-            console.log(chalk.yellow ( `Verifique se estrutura da api está no padrão:\n ${jsonStruct}`));
+            console.log(chalk.yellow ( `Check API struct:\n ${jsonStruct}`));
         }
     }
 

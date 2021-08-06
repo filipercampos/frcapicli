@@ -25,7 +25,7 @@ module.exports = class DtoCommand extends BaseCommand {
             this.generate('./src/app/domain/dto', dtoPath, dtoGenerate.get(name), `DTO ${name}`)
         }
         catch (err) {
-            console.error(chalk.red(`Falha na criação do dto ${err.message}`));
+            console.error(chalk.red(`Fail create dto ${err.message}`));
             const jsonStruct = `
                 src
                     app
@@ -34,7 +34,7 @@ module.exports = class DtoCommand extends BaseCommand {
                             dtos
                             repositories
                 `;
-            console.log(chalk.yellow(`Verifique se estrutura da api está no padrão:\n ${jsonStruct}`));
+            console.log(chalk.yellow(`Check API struct:\n ${jsonStruct}`));
         }
     }
 
