@@ -16,16 +16,16 @@ const ${resourceUpper}Model = require('../models/${resourceLower}.model');
 
 module.exports = class ${resourceUpper}Repository extends BaseRepository {
     constructor() {
-      super();
+      super(${resourceUpper}Model);
     }
 
     /**
      * Custom request for ${resource}
      * 
      */
-     async findUserByEmail(email) {
+     async find${resourceUpper}By(criteria) {
       try {
-        return await super.findOne({ email });
+        return await super.findOne({ criteria });
       } catch (error) {
         this.handleError(error);
       }

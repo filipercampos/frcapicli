@@ -22,21 +22,21 @@ module.exports = class RepositoryCommand extends BaseCommand {
 
             const resourceName = pluralize.singular(name);
             const repositoryPath = path.join(`./src/app/domain/repositories/${resourceName}.repository.js`);
-            const repositoryGenerate = require('../templates/repository');
+            const repositoryGenerate = require('../templates/repository.template');
 
             //repository
-            this.generate('./src/app/domain/repositories', repositoryPath, repositoryGenerate.get(name), `${name}`)
+            this.generate('./src/app/domain/repositories', repositoryPath, repositoryGenerate.get(name), `Repository ${name}`)
 
         }
         catch (err) {
-            console.error(chalk.red('Falha na criação do repository'));
+            console.error(chalk.red('Fail create repository'));
             console.error(chalk.red(err.message));
             const jsonStruct = `
                 src
                     app
                         repository
                 `;
-            console.log(chalk.yellow(`Verifique se estrutura da api está no padrão:\n ${jsonStruct}`));
+            console.log(chalk.yellow(`Check API struct:\n ${jsonStruct}`));
         }
     }
 

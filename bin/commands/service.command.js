@@ -22,7 +22,7 @@ module.exports = class ServiceCommand extends BaseCommand {
 
             const resourceName = pluralize.singular(name);
             const servicePath = path.join(`./src/libs/${resourceName}/${resourceName}.service.js`);
-            const serviceGenerate = require('../templates/service');
+            const serviceGenerate = require('../templates/service.template');
 
             //service
             this.generate(`./src/libs/${resourceName}`, servicePath, serviceGenerate.get(name), `Service ${name}`)

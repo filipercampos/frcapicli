@@ -23,7 +23,7 @@ module.exports = class RouteCommand extends BaseCommand {
             const resourceName = pluralize.singular(name);
 
             const routePath = path.join(`./src/app/routes/${resourceName}.route.js`);
-            const routeGenerate = require('../templates/route');
+            const routeGenerate = require('../templates/route.template');
 
             //route
             this.generate('./src/app/routes', routePath, routeGenerate.get(name), `Route ${name}`)
@@ -38,7 +38,7 @@ module.exports = class RouteCommand extends BaseCommand {
                     api
                         routes
                 `;
-            console.log(chalk.yellow ( `Verifique se estrutura da api está no padrão:\n ${jsonStruct}`));
+            console.log(chalk.yellow(`Check API struct:\n ${jsonStruct}`));
         }
     }
 

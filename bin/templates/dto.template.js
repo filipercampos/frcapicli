@@ -2,7 +2,7 @@ const Utils = require('../utils/utils');
 const pluralize = require('pluralize');
 
 /**
- * Template data model response
+ * Template dto mapper
  */
 module.exports = {
     get: function (resource) {

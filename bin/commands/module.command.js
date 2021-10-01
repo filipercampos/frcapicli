@@ -23,25 +23,30 @@ module.exports = class ModuleCommand extends BaseCommand {
             const resourceName = pluralize.singular(name);
 
             const controllerPath = path.join(`./src/app/controllers/${resourceName}.controller.js`);
-            const controllerGenerate = require('../templates/controller');
+            const controllerGen = require('../templates/controller.template');
 
             const routePath = path.join(`./src/app/routes/${resourceName}.route.js`);
-            const routeGenerate = require('../templates/route');
+            const routeGen = require('../templates/route.template');
+
+            const repositoryPath = path.join(`./src/app/domain/repositories/${resourceName}.repository.js`);
+            const repositoryGen = require('../templates/repository.template');
 
             const modelPath = path.join(`./src/app/domain/models/${resourceName}.model.js`);
-            const modelGenerate = require('../templates/model');
+            const modelGen = require('../templates/model.template');
 
             //controller
-            this._write('./src/app/controllers', controllerPath, controllerGenerate.get(name), `Controller ${name}`);
+            this._write('./src/app/controllers', controllerPath, controllerGen.get(name), `Controller ${name}`);
             
             //route
-            this._write('./src/app/routes', routePath, routeGenerate.get(name), `Route ${name}`);
-
+            this._write('./src/app/routes', routePath, routeGen.get(name), `Route ${name}`);
+            
+            //repository
+            this._write('./src/app/domain/repositories', repositoryPath, repositoryGen.get(name), `Repository ${name}`);
             
             //model
-            this._write('./src/app/domain/models', modelPath, modelGenerate.get(name), `Model ${name}`);
+            this._write('./src/app/domain/models', modelPath, modelGen.get(name), `Model ${name}`);
             
-            //lib
+            //lib (isolate module)
             // this._write(`./src/libs/${resourceName}/`, servicePath, serviceGenerate.get(name), `Service ${name}`)
             
             //swagger route

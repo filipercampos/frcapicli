@@ -11,13 +11,6 @@ const chalk = require('chalk');
  */
 module.exports = {
 
-  validateDocType: function (docType) {
-    if (docType === 'openapi' || docType === 'swagger') {
-      return true;
-    }
-    return false;
-  },
-
   /**
    * Build swagger's route
    * 
@@ -57,7 +50,6 @@ module.exports = {
     let dataRoute = `
   # ${tag} #
   /${route}:
-    x-swagger-router-controller: ${resource}.controller
     get:
       tags:
         - ${tag}
@@ -104,7 +96,6 @@ module.exports = {
        #    $ref: '#/definitions/error${resourceName}PostResponse'
               
   /${route}/{id}:
-    x-swagger-router-controller: ${resource}.controller
     get:
       tags:
         - ${tag}
@@ -361,48 +352,5 @@ module.exports = {
     });
 
   },
-
-  /**
-   * Created swagger docs if not exists
-   */
-  createSwaggerDocs: function (docType = 'openapi') {
-
-    const dir = './src/app/docs';
-
-    //verify dir swagger
-    if (!fs.existsSync(dir)) {
-      // console.log(chalk.gray(`Creating ${docType} directory ${dir} ...`));
-      fs.mkdirSync(dir, { recursive: true });
-      // console.log(chalk.green(`${dir} successfully created`));
-    }
-
-    //api path swagger docs exists
-    const swaggerPath = path.join(`${dir}/${docType}.yaml`);
-
-    //check existe swagger path
-    if (!fs.existsSync(swaggerPath)) {
-
-      console.log(chalk.gray(`Creating ${docType} docs ${swaggerPath} ...`));
-
-      // template swagger tarjet docs
-      const tarjet = path.join(`${__dirname}/../templates/${docType}.template.yaml`);
-
-      //copy swagger template 
-      // destination.yaml will be created or overwritten by default.
-      fs.copyFileSync(tarjet, swaggerPath);
-
-      console.log(chalk.green(`API docs successfully created`));
-
-      // fs.copyFile(tarjet, swaggerPath, (err) => {
-      //   if (err) {
-      //     console.log(err);
-      //     throw err;
-      //   }
-      //   console.log(chalk.green(`API docs successfully created`));
-      // });
-
-    }
-  }
-
 }
 

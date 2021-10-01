@@ -14,48 +14,49 @@ consumes:
 produces:
   - application/json
 tags:
-  - name: Usuarios
+  - name: Auth
+  - name: Users
 
 #Paths resource API
 paths:
 
- # Usuarios Route #
-  /usuarios/login:
-    x-swagger-router-controller: "usuario.controller"
+ # Auth Route #
+  /auth/access-token:
+    x-swagger-router-controller: "user.controller"
     post:
       tags:
-        - "Usuarios"
+        - "Users"
       summary: "Realiza o login do usuário"
       description: "Recupera a token para acesso aos recursos da API"
-      operationId: "postLogin"
+      operationId: "postAuth"
       parameters:
       - in: "body"
         name: "body"
         description: "Objeto JSON com os dados do login"
         required: true
         schema:
-            $ref: '#/definitions/loginRequest'  
+            $ref: '#/definitions/authRequest'  
       responses:
         "200":
           description: "Retorna o token de acesso"
           schema:
-            $ref: "#/definitions/loginResponse"
+            $ref: "#/definitions/authResponse"
         default:
           description: Erro
           schema:
             $ref: "#/definitions/errorResponse"  
-
-  /usuarios:
-    x-swagger-router-controller: usuario.controller
+ # Users Route #
+  /users:
+    x-swagger-router-controller: user.controller
     get:
       tags:
-        - Usuarios
+        - Users
       summary: Recupera dados de usuários
       description: 'Recupera dados de usuários'
-      operationId: getUsuarios
+      operationId: getUsers
       parameters: 
       - in: query
-        name: nome
+        name: name
         type: string
       - in: query
         name: cpf
@@ -64,56 +65,55 @@ paths:
         name: email
         type: string
       - in: query
-        name: numeroPagina
+        name: offset
         type: integer
         format: int32     
       - in: query
-        name: linhasPagina
+        name: limit
         type: integer
         format: int32 
       responses:
         "200":
-          description: success
+          description: OK
           schema:
-            $ref: '#/definitions/getUsuariosResponse'
-        "403":
-            description: Acesso Negado
+            $ref: '#/definitions/getUsersResponse'
+        "401":
+            description: UNAUTHORIZED
             schema: 
               $ref: '#/definitions/errorResponse' 
     post:
       tags: 
-        - Usuarios
-      summary: Cadastro de usuário
-      description: 'Cadastro de usuário'
-      operationId: postUsuario
+        - Users
+      summary: Register a user
+      description: Register a user
+      operationId: postUser
       parameters:
       - in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/postUsuarioRequest'
+          $ref: '#/definitions/postUserRequest'
       responses:
         "201":
           description: created
           schema:
             $ref: '#/definitions/postResponse'
         "403":
-          description: Acesso Negado
+          description: UNAUTHORIZED
           schema:
             $ref: '#/definitions/errorResponse'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/errorUsuarioPostResponse'
-              
-  /usuarios/{id}:
-    x-swagger-router-controller: usuario.controller
+            $ref: '#/definitions/errorUserPostResponse'
+  /users/{id}:
+    x-swagger-router-controller: user.controller
     get:
       tags:
-        - Usuarios
-      summary: Recupera dados do usuário
-      description: 'Recupera dados do usuário'
-      operationId: getUsuario
+        - Users
+      summary: Get user data from id
+      description: Get user data from id
+      operationId: getUserById
       parameters:
       - in: path
         name: id
@@ -122,19 +122,19 @@ paths:
         format: int64
       responses:
         "200":
-          description: success
+          description: OK
           schema:
-            $ref: '#/definitions/getUsuarioResponse'
-        "403":
-            description: Acesso Negado
+            $ref: '#/definitions/getUserResponse'
+        "401":
+            description: UNAUTHORIZED
             schema: 
               $ref: '#/definitions/errorResponse'
     put:
       tags:
-        - "Usuarios"
+        - "Users"
       summary: "Atualiza os dados do usuário"
       description: "Atualiza os dados do usuário"
-      operationId: "putUsuario"
+      operationId: "putUser"
       parameters:
       - in: path
         name: id
@@ -146,22 +146,22 @@ paths:
         description: "Objeto JSON com os dados do usuário"
         required: true
         schema:
-            $ref: '#/definitions/putUsuarioRequest'  
+            $ref: '#/definitions/putUserRequest'  
       responses:
         "200":
-          description: success
+          description: OK
           schema:
             $ref: '#/definitions/putResponse'
-        "403":
-          description: Acesso Negado
+        "401":
+          description: UNAUTHORIZED
           schema:
             $ref: '#/definitions/errorResponse'
     patch:
       tags:
-        - Usuarios
+        - Users
       summary: Altera os dados do usuário
       description: 'Altera os dados do usuário'
-      operationId: patchUsuario
+      operationId: patchUser
       parameters:
       - in: path
         name: id
@@ -172,14 +172,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/patchUsuarioRequest'  
+          $ref: '#/definitions/patchUserRequest'  
       responses:
         "200":
-          description: success
+          description: OK
           schema:
             $ref: '#/definitions/patchResponse'
-        "403":
-          description: Acesso Negado
+        "401":
+          description: UNAUTHORIZED
           schema:
             $ref: '#/definitions/errorResponse'
 
@@ -188,8 +188,8 @@ definitions:
 
 # Requests #
 
- # Login
-  loginRequest:
+ # Auth
+  authRequest:
     type: object
     properties:
       username:
@@ -197,32 +197,32 @@ definitions:
         description: "Nome de usuário ou email"
       password:
         type: string
- # Request Usuarios
-  # Usuarios POST Request # 
-  postUsuarioRequest:
+ # Request Users
+  # Users POST Request # 
+  postUserRequest:
     type: object
     properties:
-      nome:
+      name:
         type: string
       email:
         type: string
       senha:
         type: string
 
-  # Usuarios PUT Request #
-  putUsuarioRequest:
+  # Users PUT Request #
+  putUserRequest:
     type: object
     properties:
-      nome:
+      name:
         type: string
 
-  # Usuarios PATCH Request #
-  patchUsuarioRequest:
+  # Users PATCH Request #
+  patchUserRequest:
     type: object
     properties:
-      senhaAtual:
+      currentPassword:
         type: string
-      novaSenha:
+      password:
         type: string
 # End Request
 
@@ -279,32 +279,32 @@ definitions:
 # Responses # 
 
   # Login
-  loginResponse:
+  authResponse:
     properties:
       token:
         type: string
         description: 'base64-encoded'
 
-  # Usuarios #
-  getUsuariosResponse:
+  # Users #
+  getUsersResponse:
     type: object
     properties:
       data:
         type: array
         items:
-          $ref: '#/definitions/usuarioResponse'
-  getUsuarioResponse:
+          $ref: '#/definitions/userResponse'
+  getUserResponse:
     type: object
     properties:
       data:
-        $ref: '#/definitions/usuarioResponse'
-  usuarioResponse:
+        $ref: '#/definitions/userResponse'
+  userResponse:
     type: object
     properties:
       id:
         type: integer
         format: int64
-      nome:
+      name:
         type: string
       dataNascimento:
         type: integer
@@ -315,15 +315,14 @@ definitions:
 # End Response 
 
 
-
 # enums
   # myEnum:
   #   type: string
   #   enum: [ ..., ... ]
 # enum response => specific error
-  errorUsuarioPostResponse:
+  errorUserPostResponse:
     type: object
     properties:
       message:
         type: string
-        enum: [ CPF_CADASTRADO, EMAIL_CADASTRADO, CELULAR_CADASTRADO ]                     
+        enum: [ EMAIL_EXISTS ]                     

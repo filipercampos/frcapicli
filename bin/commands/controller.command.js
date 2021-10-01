@@ -23,7 +23,7 @@ module.exports = class ControllerCommand extends BaseCommand {
             const resourceName = pluralize.singular(name);
 
             const controllerPath = path.join(`./src/app/controllers/${resourceName}.controller.js`);
-            const controllerGenerate = require('../templates/controller');
+            const controllerGenerate = require('../templates/controller.template');
 
             //controller
             this.generate('./src/app/controllers', controllerPath, controllerGenerate.get(name), `Controller ${name}`)

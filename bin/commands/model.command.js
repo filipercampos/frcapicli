@@ -21,7 +21,7 @@ module.exports = class ModelCommand extends BaseCommand {
             console.log(chalk.magenta("Building model ..."));
             const resourceName = pluralize.singular(name);
             const modelPath = path.join(`./src/app/domain/models/${resourceName}.model.js`);
-            const modelGenerate = require('../templates/model');
+            const modelGenerate = require('../templates/model.template');
             //model
             this.generate('./src/app/domain/models', modelPath, modelGenerate.get(name), `Model ${name}`)
         }

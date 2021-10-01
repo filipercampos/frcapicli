@@ -12,24 +12,24 @@ module.exports = {
     return `'use strict';
 const BaseController = require('./base.controller');
 const { ${resourceUpper}Repository } = require('../domain/repositories');
-const { SwaggerHelper, HttpStatusCode } = require('../common/helpers');
+const { RequestHelper } = require('../common/helpers');
 const { BadRequestException } = require('../common/exceptions');
 
 class ${resourceUpper}Controller extends BaseController {
   constructor() {
-    super(new NegocioRepository());
+    super(new ${resourceUpper}Repository());
   }
 
   /**
-  * Request GET
+  * Custom Request GET
   */
   async customRequest(req, res) {
     try {
       //validate required query 
-      SwaggerHelper.validateQuery(req, ['name', 'lastname']);
+      //SwaggerHelper.validateQuery(req, ['name', 'lastname']);
       //validate required body
       // SwaggerHelper.validateBody(req, ['name', 'lastname']);
-      const result = await this._service.find(req.query);
+      const result = await this._repository.find(req.query);
       super.sendSuccess(res, result);
     } catch (err) {
       super.sendError(res, err);

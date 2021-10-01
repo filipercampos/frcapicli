@@ -1,17 +1,19 @@
 const Utils = require('../utils/utils');
 
 /**
- * Template data model response
+ * Template model mongoose
  */
 module.exports = {
     get: function (resource) {
+
+        const resourceUpper = Utils.toFirstCase(resource);
         return `'use strict';
 const mongoose = require('../../../infra/database');
-const { BcryptUtil } = require('../../common/utils');
+const { BcryptUtil } = require('../../common/utils');//use your logic
 // or add your collection name here
 // const MongoConst = require('../constants/mongo_const');
 
-const ${Utils.toFirstCase(resource)}Schema = new mongoose.Schema({
+const ${resourceUpper}Schema = new mongoose.Schema({
     name: {
         type: String,
         require: true
@@ -30,16 +32,17 @@ const ${Utils.toFirstCase(resource)}Schema = new mongoose.Schema({
     } 
 });
 
-//criptografa o password ao salva o usuário
-UsuarioSchema.pre('save', async function (next) {
+//encode password before save
+${resourceUpper}Schema.pre('save', async function (next) {
+    //TODO pre.save here
     const hash = await BcryptUtil.hash(this.password);
     this.password = hash;
     next();
 })
 
-const ${Utils.toFirstCase(resource)} = mongoose.model('${resource.toLowerCase()}', UsuarioSchema);
+const ${resourceUpper} = mongoose.model('${resource.toLowerCase()}', ${resourceUpper}Schema);
 
-module.exports = ${Utils.toFirstCase(resource)};`;
+module.exports = ${resourceUpper};`;
     }
 
 };

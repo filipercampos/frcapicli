@@ -13,10 +13,14 @@ comanders
     .command('generate <schematics> <name> [docType] [json]')
     .alias('g')
     .description('creates template: controller, model, dto, lib, module or docs')
-    .action(function (schematic, schematicName, docType, json) {
+    .action(function (schematic, schematicName, docType='openapi', json) {
         if (!schematicName) {
             console.error("Resource name is not defined\nUse frc generate schematic resource");
         } else {
+            console.log(schematic);
+            console.log(schematicName);
+            console.log(docType);
+            console.log(json);
 
             if (schematic === CommandConst.MODULE) {
                 new commands.ModuleCommand(schematicName).command();
@@ -128,6 +132,5 @@ comanders
             },
         ];
         console.table(table);
-        console.table([{ name: 1, alias: 'name lis' }]);
     });
 comanders.parse(process.argv);

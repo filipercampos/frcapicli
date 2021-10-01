@@ -19,7 +19,8 @@ module.exports = class OpenApiCommand extends BaseCommand {
 
         if (json) {
             try {
-                console.log(chalk.magenta("Building docs and response ..."));
+                console.log(chalk.magenta("Building openapi docs and response ..."));
+                swaggerGenerate.createSwaggerDocs(DOC_TYPE_OPENAPI);
                 swaggerGenerate.createResponse(name, json, DOC_TYPE_OPENAPI);
             }
             catch (err) {

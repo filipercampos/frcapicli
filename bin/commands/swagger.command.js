@@ -19,7 +19,8 @@ module.exports = class SwaggerCommand extends BaseCommand {
 
         if (json) {
             try {
-                console.log(chalk.magenta("Building swagger and response ..."));
+                console.log(chalk.magenta("Building swagger docs and response ..."));
+                swaggerGenerate.createSwaggerDocs(DOC_TYPE_SWAGGER);
                 swaggerGenerate.createResponse(name, json, DOC_TYPE_SWAGGER);
             }
             catch (err) {

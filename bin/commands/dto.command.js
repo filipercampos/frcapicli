@@ -20,7 +20,7 @@ module.exports = class DtoCommand extends BaseCommand {
             console.log(chalk.magenta("Building dto ..."));
             const resourceName = pluralize.singular(name);
             const dtoPath = path.join(`./src/app/domain/dto/${resourceName}.dto.js`);
-            const dtoGenerate = require('../templates/dto');
+            const dtoGenerate = require('../templates/dto.template');
             //dto
             this.generate('./src/app/domain/dto', dtoPath, dtoGenerate.get(name), `DTO ${name}`)
         }

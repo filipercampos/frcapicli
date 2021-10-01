@@ -15,22 +15,22 @@ servers:
     description: Development Server
   # - url: http://dev-apilocavia.infosistemas.com.br:7003/api/v1
   #   description: Development Server
-#     variables:
-#       port:
-#         enum:
-#           - "7000"
-#         default: "7000"
-#       basePath:
-#         default: api/v1
-#   - url: http://localhost:{port}/{basePath}
-#     description: Production Server
-#     variables:
-#       port:
-#         enum:
-#           - "8000"
-#         default: "8000"
-#       basePath:
-#         default: api/v1
+  #   variables:
+  #     port:
+  #       enum:
+  #         - "7000"
+  #       default: "7000"
+  #     basePath:
+  #       default: api/v1
+  # - url: http://localhost:{port}/{basePath}
+  #   description: Production Server
+  #   variables:
+  #     port:
+  #       enum:
+  #         - "8000"
+  #       default: "8000"
+  #     basePath:
+  #       default: api/v1
   
 # ordem alfabetica A-Z
 tags:
