@@ -5,41 +5,42 @@ const path = require('path');
 const chalk = require('chalk');
 
 /**
- * Generate route 
+ * Generate route
  */
 module.exports = class RouteCommand extends BaseCommand {
+  constructor(schematic) {
+    super('route');
+    this._schematic = schematic;
+  }
 
-    constructor(schematic) {
-        super('route');
-        this._schematic = schematic;
-    }
+  command() {
+    try {
+      const name = this._schematic;
 
-    command() {
-        try {
-            const name = this._schematic;
+      console.log(chalk.magenta('Building route ...'));
 
-            console.log(chalk.magenta("Building route ..."));
+      const resourceName = pluralize.singular(name);
 
-            const resourceName = pluralize.singular(name);
+      const routePath = path.join(`./src/app/routes/${resourceName}.routes.js`);
+      const routeGenerate = require('../templates/route.template');
 
-            const routePath = path.join(`./src/app/routes/${resourceName}.route.js`);
-            const routeGenerate = require('../templates/route.template');
+      //route
+      this.generate(
+        './src/app/routes',
+        routePath,
+        routeGenerate.get(name),
+        `Route ${name}`
+      );
+    } catch (err) {
+      console.error(chalk.red('Route create failed'));
+      console.error(chalk.red(err.message));
 
-            //route
-            this.generate('./src/app/routes', routePath, routeGenerate.get(name), `Route ${name}`)
-
-        }
-        catch (err) {
-            console.error(chalk.red('Route create failed'));
-            console.error(chalk.red(err.message));
-
-            const jsonStruct = `
+      const jsonStruct = `
                 app
                     api
                         routes
                 `;
-            console.log(chalk.yellow(`Check API struct:\n ${jsonStruct}`));
-        }
+      console.log(chalk.yellow(`Check API struct:\n ${jsonStruct}`));
     }
-
-}
+  }
+};

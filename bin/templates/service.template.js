@@ -5,11 +5,10 @@ const utils = require('../utils/utils');
  * Template service
  */
 module.exports = {
-get: function (resource) {
-
-  const resourceUpper = utils.toFirstCase(resource);
-  // let resourceLower = pluralize.singular(utils.toFirstCase(resource, false));
-  return `'use strict';
+  get: function (resource) {
+    const resourceUpper = utils.toFirstCase(resource);
+    // let resourceLower = pluralize.singular(utils.toFirstCase(resource, false));
+    return `'use strict';
 
 const BaseService = require('../base.service');
 const ParameterUtil = require('../../utils/parameter');
@@ -76,8 +75,5 @@ module.exports = class ${resourceUpper}SService extends BaseService {
 
 }
 `;
-  }
-}
-
-
-
+  },
+};

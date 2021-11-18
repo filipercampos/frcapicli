@@ -4,11 +4,11 @@ const pluralize = require('pluralize');
  * Template controller
  */
 module.exports = {
-    get: function (resource) {
-        let resourcePlural = pluralize.plural(resource.toLowerCase());
-        let resourceLower = pluralize.plural(resource.toLowerCase());
+  get: function (resource) {
+    let resourcePlural = pluralize.plural(resource.toLowerCase());
+    let resourceLower = resource.toLowerCase();
 
-        return `'use strict';
+    return `'use strict';
 const router = require('express').Router();
 const controller = require('../controllers/${resourceLower}.controller');
 /*
@@ -26,7 +26,7 @@ router.get('/${resourcePlural}/:id', (req, res) => controller.findById(req, res)
 router.post('/${resourcePlural}', (req, res) => controller.post(req, res));
 //put
 router.put('/${resourcePlural}/:id', (req, res) => controller.put(req, res));
-//put
+//patch
 router.patch('/${resourcePlural}/:id', (req, res) => controller.patch(req, res));
 //delete
 router.delete('/${resourcePlural}/:id', (req, res) => controller.deleteOne(req, res));
@@ -34,9 +34,5 @@ router.delete('/${resourcePlural}/:id', (req, res) => controller.deleteOne(req, 
 module.exports = app => app.use('/api/v1', router);
 
 `;
-    }
-}
-
-
-
-
+  },
+};

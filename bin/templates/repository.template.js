@@ -6,7 +6,6 @@ const utils = require('../utils/utils');
  */
 module.exports = {
   get: function (resource) {
-
     let resourceUpper = utils.toFirstCase(resource);
     let resourceLower = pluralize.singular(utils.toFirstCase(resource, false));
     return `'use strict';
@@ -32,8 +31,5 @@ module.exports = class ${resourceUpper}Repository extends BaseRepository {
     }
   }
 `;
-  }
-}
-
-
-
+  },
+};

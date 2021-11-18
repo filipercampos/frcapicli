@@ -38,9 +38,5 @@ class ${resourceUpper}Controller extends BaseController {
 }
 module.exports = new ${resourceUpper}Controller();
 `;
-  }
-}
-
-
-
-
+  },
+};
