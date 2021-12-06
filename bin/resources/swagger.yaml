@@ -8,39 +8,21 @@ info:
     name: Your Name
     email: email@domain.com
   license:
-    name: "ISC"
+    name: 'ISC'
     url: http://localhost
 servers:
-  - url: http://localhost:7003/api/v1
+  - url: http://localhost:3000/api/v1
     description: Development Server
-  # - url: http://dev-apilocavia.infosistemas.com.br:7003/api/v1
-  #   description: Development Server
-  #   variables:
-  #     port:
-  #       enum:
-  #         - "7000"
-  #       default: "7000"
-  #     basePath:
-  #       default: api/v1
-  # - url: http://localhost:{port}/{basePath}
-  #   description: Production Server
-  #   variables:
-  #     port:
-  #       enum:
-  #         - "8000"
-  #       default: "8000"
-  #     basePath:
-  #       default: api/v1
-  
+
 # ordem alfabetica A-Z
 tags:
   - name: Auth
-    description: "Token de acesso"
-  - name: Usuarios
-    description: "Dados de Usuários"
+    description: 'Token de acesso'
+  - name: Users
+    description: 'Dados de Usuários'
 
 paths:
- # Auth #
+  # Auth #
   /auth/access-token:
     post:
       tags:
@@ -66,11 +48,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/authResponse'
         400:
-          $ref: '#/components/responses/badRequestResponse' 
+          $ref: '#/components/responses/badRequestResponse'
         401:
-          $ref: '#/components/responses/unauthorizedResponse' 
+          $ref: '#/components/responses/unauthorizedResponse'
         500:
-          $ref: '#/components/responses/internalServerErrorResponse' 
+          $ref: '#/components/responses/internalServerErrorResponse'
 
   /auth/refresh-token:
     post:
@@ -92,17 +74,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/authResponse'
         400:
-          $ref: '#/components/responses/badRequestResponse' 
+          $ref: '#/components/responses/badRequestResponse'
         401:
-          $ref: '#/components/responses/unauthorizedResponse' 
+          $ref: '#/components/responses/unauthorizedResponse'
         500:
-          $ref: '#/components/responses/internalServerErrorResponse' 
+          $ref: '#/components/responses/internalServerErrorResponse'
 
- # Usuarios Routes #
-  /usuarios/{id}:
+  # Users Routes #
+  /users/{id}:
     get:
       tags:
-        - Usuarios
+        - Users
       summary: Recupera dados de usuários
       operationId: getUsuario
       security:
@@ -119,19 +101,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/usuarioResponse"
+                $ref: '#/components/schemas/usuarioResponse'
         400:
-          $ref: '#/components/responses/badRequestResponse' 
+          $ref: '#/components/responses/badRequestResponse'
         401:
-          $ref: '#/components/responses/unauthorizedResponse' 
+          $ref: '#/components/responses/unauthorizedResponse'
         500:
-          $ref: '#/components/responses/internalServerErrorResponse' 
-  /usuarios:
+          $ref: '#/components/responses/internalServerErrorResponse'
+  /users:
     get:
       tags:
-        - Usuarios
+        - Users
       summary: Recupera dados de usuários
-      operationId: getUsuarios
+      operationId: getUsers
       security:
         - ApiKeyAuth: []
       parameters:
@@ -149,16 +131,16 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/usuarioResponse"
+                  $ref: '#/components/schemas/usuarioResponse'
         400:
-          $ref: '#/components/responses/badRequestResponse' 
+          $ref: '#/components/responses/badRequestResponse'
         401:
-          $ref: '#/components/responses/unauthorizedResponse' 
+          $ref: '#/components/responses/unauthorizedResponse'
         500:
-          $ref: '#/components/responses/internalServerErrorResponse' 
+          $ref: '#/components/responses/internalServerErrorResponse'
     post:
       tags:
-        - Usuarios
+        - Users
       summary: Registra um usuário no sistema
       operationId: postUsuario
       security:
@@ -175,7 +157,7 @@ paths:
                   type: string
                 password:
                   type: string
-                  description: "CryptoJS: mode.CBC pad.Pkcs7"
+                  description: 'CryptoJS: mode.CBC pad.Pkcs7'
         required: true
       responses:
         201:
@@ -183,33 +165,33 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/postResponse"
+                $ref: '#/components/schemas/postResponse'
         400:
-          $ref: '#/components/responses/badRequestResponse' 
+          $ref: '#/components/responses/badRequestResponse'
         401:
-          $ref: '#/components/responses/unauthorizedResponse' 
+          $ref: '#/components/responses/unauthorizedResponse'
         500:
-          $ref: '#/components/responses/internalServerErrorResponse' 
+          $ref: '#/components/responses/internalServerErrorResponse'
 components:
   responses:
-    badRequestResponse:      
+    badRequestResponse:
       description: BAD_REQUEST
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/errorResponse"
-    unauthorizedResponse:      
+            $ref: '#/components/schemas/errorResponse'
+    unauthorizedResponse:
       description: UNAUTHORIZED
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/errorResponse"
+            $ref: '#/components/schemas/errorResponse'
     internalServerErrorResponse:
-        description: INTERNAL_SERVER_ERROR
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/errorResponse"
+      description: INTERNAL_SERVER_ERROR
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
@@ -236,7 +218,7 @@ components:
           properties:
             message:
               type: string
-    authResponse:              
+    authResponse:
       type: object
       properties:
         data:
@@ -247,7 +229,7 @@ components:
             issuedAt:
               type: integer
             expiresAt:
-              type: integer                  
+              type: integer
     usuarioResponse:
       type: object
       properties:

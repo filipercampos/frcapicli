@@ -6,7 +6,7 @@ const utils = require('../utils/utils');
  */
 module.exports = {
   get: function (resource) {
-    let resourceUpper = pluralize.singular(utils.toFirstCase(resource));
+    let resourceUpper = pluralize.singular(utils.toResourceName(resource));
     // let resourceLower = pluralize.singular(utils.toFirstCase(resource, false));
 
     return `'use strict';

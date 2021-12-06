@@ -5,38 +5,25 @@ const utils = require('./utils');
 const Exception = require('../exception');
 const _ = require('lodash');
 const chalk = require('chalk');
+const SwaggerTemplate = require('../templates/swagger.template');
 
 /**
+ * Swagger 2.0
+ *
  * Template swagger route
  */
 module.exports = {
-
-  validateDocType: function (docType) {
-    if (docType === 'openapi' || docType === 'swagger') {
-      return true;
-    }
-    return false;
-  },
-
   /**
    * Build swagger's route
-   * 
-   * @param {resource} Resource is lower case
+   *
+   * @param {resource} resource is lower case
    */
-  createRoute: function (resource, docType) {
+  createRoute: function (resource) {
     //plural
     let route = pluralize.plural(resource).toLowerCase();
-
-    //first letter upper plural
-    let tag = utils.toFirstCase(pluralize.plural(resource));
-
-    //first letter upper singular
-    let resourceName = utils.toFirstCase(pluralize.singular(resource));
-    const swaggerPath = path.join(`./src/app/docs/${docType}.yaml`);
+    const swaggerPath = path.join(`./src/app/docs/swagger.yaml`);
     let existSwagger = fs.existsSync(swaggerPath);
     let create = false;
-
-
     if (existSwagger === true) {
       const swagger = fs.readFileSync(swaggerPath, 'utf8');
       const data = swagger.replace(/\r/g, '').split('\n');
@@ -48,187 +35,23 @@ module.exports = {
           return false;
         }
       }
-    } else {
-      //create swagger
-      // create = this.createSwaggerDocs(docType);
     }
-
-    //create data route
-    let dataRoute = `
-  # ${tag} #
-  /${route}:
-    x-swagger-router-controller: ${resource}.controller
-    get:
-      tags:
-        - ${tag}
-      summary: Recupera dados de ${route}
-      description: 'Recupera dados de ${route}'
-      operationId: get${tag}
-      parameters: 
-      - in: query
-        name: value
-        type: string
-      responses:
-        "200":
-          description: success
-          schema:
-            $ref: '#/definitions/get${tag}Response'
-        "403":
-            description: Acesso Negado
-            schema: 
-              $ref: '#/definitions/errorResponse' 
-    post:
-      tags: 
-        - ${tag}
-      summary: Cadastro de ${resource}
-      description: 'Cadastro de ${resource}'
-      operationId: post${resourceName}
-      parameters:
-      - in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/post${resourceName}Request'
-      responses:
-        "201":
-          description: created
-          schema:
-            $ref: '#/definitions/postResponse'
-        "403":
-          description: Acesso Negado
-          schema:
-            $ref: '#/definitions/errorResponse'
-       #"422":
-       #  description: Unprocessable Entity
-       #  schema:
-       #    $ref: '#/definitions/error${resourceName}PostResponse'
-              
-  /${route}/{id}:
-    x-swagger-router-controller: ${resource}.controller
-    get:
-      tags:
-        - ${tag}
-      summary: Recupera dados do ${resource}
-      description: 'Recupera dados do ${resource}'
-      operationId: get${resourceName}
-      parameters:
-      - in: path
-        name: id
-        required: true
-        type: integer
-        format: int64
-      responses:
-        "200":
-          description: success
-          schema:
-            $ref: '#/definitions/get${resourceName}Response'
-        "403":
-            description: Acesso Negado
-            schema: 
-              $ref: '#/definitions/errorResponse'
-    put:
-      tags:
-        - "${tag}"
-      summary: "Atualiza os dados do ${resource}"
-      description: "Atualiza os dados do ${resource}"
-      operationId: "put${resourceName}"
-      parameters:
-      - in: path
-        name: id
-        required: true
-        type: integer
-        format: int64 
-      - in: "body"
-        name: "body"
-        description: "Objeto JSON com os dados do ${resource}"
-        required: true
-        schema:
-            $ref: '#/definitions/put${resourceName}Request'  
-      responses:
-        "200":
-          description: success
-          schema:
-            $ref: '#/definitions/putResponse'
-        "403":
-          description: Acesso Negado
-          schema:
-            $ref: '#/definitions/errorResponse'
-    patch:
-      tags:
-        - ${tag}
-      summary: Altera os dados do ${resource}
-      description: 'Altera os dados do ${resource}'
-      operationId: patch${resourceName}
-      parameters:
-      - in: path
-        name: id
-        required: true
-        type: integer
-        format: int64 
-      - in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/patch${resourceName}Request'  
-      responses:
-        "200":
-          description: success
-          schema:
-            $ref: '#/definitions/patchResponse'
-        "403":
-          description: Acesso Negado
-          schema:
-            $ref: '#/definitions/errorResponse'
-  
-  #${tag} #
-  get${tag}Response:
-    type: object
-    properties:
-      data:
-        type: array
-        items:
-          $ref: '#/definitions/${resource}Response'
-  get${resourceName}Response:
-    type: object
-    properties:
-      data:
-        $ref: '#/definitions/${resource}Response'
-  ${resource}Response:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-  
-  # ${tag} POST Request # 
-  post${resourceName}Request:
-    type: object
-    properties:
-      name:
-        type: string
-  
-  #${tag} PUT Request #
-  put${resourceName}Request:
-    type: object
-    properties:
-      name:
-        type: string    
-  
-  #${tag} PATCH Request #
-  patch${resourceName}Request:
-    type: object
-    properties:
-      name:
-        type: string        
-        `;
+    //get data route
+    const dataRoute = SwaggerTemplate.routes(resource);
 
     if (create) {
+      //save data route
       fs.appendFileSync(swaggerPath, dataRoute, 'utf-8');
-      console.log(chalk.green(`Swagger route '${resource}' successfully added`));
+      //show log
+      console.log(
+        chalk.green(`Swagger route '${resource}' successfully added`)
+      );
     } else {
-
       const swaggerPathTmp = path.join('./tmp/swagger');
-      const swaggerPathRoute = path.join(swaggerPathTmp, `swagger-${route}.yaml`);
+      const swaggerPathRoute = path.join(
+        swaggerPathTmp,
+        `swagger-${route}.yaml`
+      );
 
       if (!fs.existsSync(swaggerPathTmp)) {
         fs.mkdirSync(swaggerPathTmp, { recursive: true });
@@ -236,38 +59,41 @@ module.exports = {
 
       fs.writeFileSync(swaggerPathRoute, dataRoute, 'utf-8');
       console.log(chalk.green(`${swaggerPathRoute} successfully created`));
-      console.warn(chalk.yellow(`*** NOTE *** => ${swaggerPathRoute} must be add manually at swagger.yaml`));
+      console.warn(
+        chalk.yellow(
+          `*** NOTE *** => ${swaggerPathRoute} must be add manually at swagger.yaml`
+        )
+      );
     }
   },
 
   /**
    * Build swagger's properties response
-   * 
-   * @param {Resource name} resource 
-   * @param {JSON response} response 
+   *
+   * @param {Resource name} resource
+   * @param {JSON response} response
    */
-  createSwaggerResponse: function (resource, response, docType = 'openapi') {
-
+  createResponse: function (resource, response) {
     const letters = '/^[A-Za-z]+[0-9]+$/';
 
-    const swaggerPath = `./src/app/docs/${docType}.yaml`;
+    const swaggerPath = `./src/app/docs/swagger.yaml`;
 
-    const swagger = fs.readFileSync(swaggerPath, 'utf8')
+    const swagger = fs.readFileSync(swaggerPath, 'utf8');
     const data = swagger.replace(/\r/g, '').split('\n');
-
-    let resourceUpper = utils.toFirstCase(resource);
-    let resourcePluralUpper = pluralize.plural(utils.toFirstCase(resource));
+    //name singulare lower + Schema
+    let resourceName = resource.toLowerCase() + 'Schema';
 
     let jsonString = response.replace('{', '').replace('}', '');
     jsonString = jsonString.replace(/'\"/g, '').replace(/\"/g, '');
     let fields = jsonString.split(',');
     let swaggerProperties = '';
-    let responseName = `${resource}Response`;
-    console.log(jsonString);
+
     for (let i = 0; i < data.length; i++) {
       const lineData = data[i];
-      if (lineData.includes(responseName)) {
-        console.log(chalk.yellow(`Response '${pluralize.plural(resource)} already exists`));
+      if (lineData.includes(resourceName)) {
+        console.log(
+          chalk.yellow(`Response '${pluralize.plural(resource)} already exists`)
+        );
         return false;
       }
     }
@@ -277,7 +103,7 @@ module.exports = {
       let field = f[0];
       let value = '';
 
-      //todos os values do split
+      //all values from split
       for (let j = 1; j < f.length; j++) {
         value = value + f[j];
       }
@@ -295,9 +121,11 @@ module.exports = {
         //se for nan nao eh inteiro
         isDecimal = isNaN(isInteger) ? false : value.includes('.');
         //teste o boolean
-        isBoolean = isNaN(isInteger) ? value === 'true' || value === 'false' : false;
+        isBoolean = isNaN(isInteger)
+          ? value === 'true' || value === 'false'
+          : false;
 
-        //define a precisao do decimal
+        //set scale decimal
         if (isDecimal) {
           realPrecision = value.split('.')[1].length;
         }
@@ -308,7 +136,6 @@ module.exports = {
           isInteger = false;
           isDecimal = false;
         }
-
       }
 
       let typeSwagger = 'string';
@@ -326,47 +153,32 @@ module.exports = {
       } else if (isBoolean) {
         typeSwagger = 'boolean';
       }
-      //defaul string 
+      //defaul string
 
-      let fieldSwagger =
-        `${field}:
+      let fieldSwagger = `${field}:
         type: ${typeSwagger}
       `;
       swaggerProperties += fieldSwagger;
     }
 
-    let stringData =
-      `
-  # Schemas ${resourceUpper}
-  ${resourcePluralUpper}Response:
-    type: object
-    properties:
-      data:
-        type: array
-        items:
-          $ref: '#/definitions/${responseName}'
-  ${resourceUpper}Response:
-    type: object
-    properties:
-      data:
-        $ref: '#/definitions/${responseName}'
-  ${responseName}:
-    type: object
-    properties:
+    let stringData = `# add section components
+components:
+  schemas:
+    ${resourceName}:
+      type: object
+      properties:
       ${swaggerProperties}`;
 
     fs.appendFile(swaggerPath, stringData, function (err) {
-      if (err) throw new Exception("Build response fail.=>\n\t" + err);
+      if (err) throw new Exception('Build response fail =>\n\t' + err);
       console.log(chalk.green('Response swagger saved!'));
     });
-
   },
 
   /**
    * Created swagger docs if not exists
    */
-  createSwaggerDocs: function (docType = 'openapi') {
-
+  createDocs: function () {
     const dir = './src/app/docs';
 
     //verify dir swagger
@@ -377,17 +189,16 @@ module.exports = {
     }
 
     //api path swagger docs exists
-    const swaggerPath = path.join(`${dir}/${docType}.yaml`);
+    const swaggerPath = path.join(`${dir}/swagger.yaml`);
 
     //check existe swagger path
     if (!fs.existsSync(swaggerPath)) {
-
-      console.log(chalk.gray(`Creating ${docType} docs ${swaggerPath} ...`));
+      console.log(chalk.gray(`Creating swagger docs ${swaggerPath} ...`));
 
       // template swagger tarjet docs
-      const tarjet = path.join(`${__dirname}/../templates/${docType}.template.yaml`);
+      const tarjet = path.join(`${__dirname}/../resources/swagger.yaml`);
 
-      //copy swagger template 
+      //copy swagger template
       // destination.yaml will be created or overwritten by default.
       fs.copyFileSync(tarjet, swaggerPath);
 
@@ -400,9 +211,6 @@ module.exports = {
       //   }
       //   console.log(chalk.green(`API docs successfully created`));
       // });
-
     }
-  }
-
-}
-
+  },
+};

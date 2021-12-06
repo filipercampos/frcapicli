@@ -1,0 +1,35 @@
+components:
+  # Schemas
+  schemas:
+    errorSchema:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            code:
+              type: integer
+            message:
+              type: string
+            status:
+              type: string
+    atividadeSchema:
+      type: object
+      properties:
+        id:
+          type: string
+        createdAt:
+          type: string
+          description: yyyy-MM-dd HH:mm
+  # Request Bodies
+  requestBodies:
+    postEmpresaBody:
+      description: A JSON object containing empresa information
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              nome:
+                type: string

@@ -6,12 +6,11 @@ const utils = require('../utils/utils');
  */
 module.exports = {
   get: function (resource) {
-    let resourceUpper = utils.toFirstCase(resource);
+    let resourceUpper = utils.toResourceName(resource);
     let resourceLower = pluralize.singular(utils.toFirstCase(resource, false));
     return `'use strict';
 const BaseRepository = require('./base.repository');
 const ${resourceUpper}Model = require('../models/${resourceLower}.model');
-
 
 module.exports = class ${resourceUpper}Repository extends BaseRepository {
     constructor() {

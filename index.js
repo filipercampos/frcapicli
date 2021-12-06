@@ -1,29 +1,27 @@
 #! /usr/bin/env node
 const comanders = require('commander');
-const commands = require('./bin/commands/index');
-const swaggerUtil = require('./bin/utils/swagger.util');
+const commands = require('./bin/commands');
 const chalk = require('chalk');
 const CommandConst = require('./bin/constants/command.const');
+const HelpUtil = require('./bin/utils/help.util');
 
 comanders
   .version('1.0.8')
   .description('A command line interface for Node.js API');
 
+//CLI API Rest
 comanders
-  .command('generate <schematics> <name> [docType] [json]')
+  .command('generate <schematics> <name> [json]')
   .alias('g')
-  .description('creates template: controller, model, dto, lib, module or docs')
-  .action(function (schematic, schematicName, docType = 'openapi', json) {
+  .description('creates template: controller, model, dto, lib, module and docs')
+  .action(function (schematic, schematicName, json) {
     if (!schematicName) {
       console.error(
-        'Resource name is not defined\nUse frc generate schematic resource'
+        chalk.red(
+          'Resource name is not defined\nUse frc generate schematic resource'
+        )
       );
     } else {
-      console.log(schematic);
-      console.log(schematicName);
-      console.log(docType);
-      console.log(json);
-
       if (schematic === CommandConst.MODULE) {
         new commands.ModuleCommand(schematicName).command();
       } else if (schematic === CommandConst.CONTROLLER) {
@@ -39,15 +37,7 @@ comanders
       } else if (schematic === CommandConst.LIB) {
         new commands.ServiceCommand(schematicName).command();
       } else if (schematic === CommandConst.DOCS) {
-        if (docType && !swaggerUtil.validateDocType(docType)) {
-          console.error(chalk.red('docType invalid. use openapi or swagger'));
-          return;
-        }
-        if (docType === CommandConst.DOC_TYPE_SWAGGER) {
-          new commands.SwaggerCommand(schematicName).commandArgs(json);
-        } else {
-          new commands.OpenApiCommand(schematicName).commandArgs(json);
-        }
+        new commands.SwaggerCommand(schematicName).commandArgs(json);
       } else {
         console.error(
           chalk.red(
@@ -58,6 +48,7 @@ comanders
     }
   });
 
+//CLI for config and env file
 comanders
   .command('list <schematics> <path> [type] [configName]')
   .alias('l')
@@ -92,44 +83,11 @@ comanders
     }
   });
 
+//Help
 comanders
   .command('help')
   .alias('h')
   .action(function () {
-    const table = [
-      {
-        name: 'controller',
-        description: 'Generate a new model',
-      },
-      {
-        name: 'repository',
-        description: 'Generate a new model',
-      },
-      {
-        name: 'route',
-        description: 'Generate a new route',
-      },
-      {
-        name: 'model',
-        description: 'Generate a new model mongoose',
-      },
-      {
-        name: 'dto',
-        description: 'Generate a new dto',
-      },
-      {
-        name: 'module',
-        description: 'Generate a new module',
-      },
-      {
-        name: 'lib',
-        description: 'Generate a new lib',
-      },
-      {
-        name: 'docs',
-        description: 'Generate a route/response swagger',
-      },
-    ];
-    console.table(table);
+    console.table(HelpUtil.helpOptions());
   });
 comanders.parse(process.argv);

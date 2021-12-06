@@ -1,0 +1,53 @@
+# Resources
+components:
+  responses:
+    apiResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  message:
+                    type: string
+    badRequestResponse:
+      description: BAD_REQUEST
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorSchema'
+    unauthorizedResponse:
+      description: UNAUTHORIZED
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorSchema'
+    internalServerErrorResponse:
+      description: INTERNAL_SERVER_ERROR
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorSchema'
+    conflictResponse:
+      description: CONFLICT
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorSchema'
+    postResponse:
+      description: CREATED
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  message:
+                    type: string

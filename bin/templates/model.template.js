@@ -5,7 +5,7 @@ const Utils = require('../utils/utils');
  */
 module.exports = {
   get: function (resource) {
-    const resourceUpper = Utils.toFirstCase(resource);
+    const resourceUpper = Utils.toResourceName(resource);
     return `'use strict';
 const mongoose = require('../../../infra/database');
 const { BcryptUtil } = require('../../common/utils');//use your logic

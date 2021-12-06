@@ -1,0 +1,117 @@
+paths:
+  # $tag Routes #
+  /$route$/{id}:
+    get:
+      tags:
+        - $tag$
+      summary: Recupera dados de um $resource$
+      operationId: get$Resource$NameById
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          $ref: '#/components/schemas/$resource$Schema'
+        400:
+          $ref: '#/components/responses/badRequestResponse'
+        401:
+          $ref: '#/components/responses/unauthorizedResponse'
+        500:
+          $ref: '#/components/responses/internalServerErrorResponse'
+    put:
+      tags:
+        - $tag$
+      summary: Update $resource$
+      operationId: put$resourceName$
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/post$resourceName$Body'
+      responses:
+        200:
+          $ref: '#/components/responses/postResponse'
+        400:
+          $ref: '#/components/responses/badRequestResponse'
+        401:
+          $ref: '#/components/responses/unauthorizedResponse'
+        500:
+          $ref: '#/components/responses/internalServerErrorResponse'
+    patch:
+      tags:
+        - $tag$
+      summary: Update partial $resource$
+      operationId: patch$resourceName$
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        description: A JSON object containing $resource$ information
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: ['Enable', 'Disable']
+      responses:
+        200:
+          $ref: '#/components/responses/apiResponse'
+        400:
+          $ref: '#/components/responses/badRequestResponse'
+        401:
+          $ref: '#/components/responses/unauthorizedResponse'
+        500:
+          $ref: '#/components/responses/internalServerErrorResponse'
+  /$route$:
+    get:
+      tags:
+        - $tag$
+      summary: Recupera dados de $resource$s
+      operationId: get$tag$
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: name
+          required: false
+          allowReserved: true
+          schema:
+            type: string
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: ['Enable', 'Disable']
+      responses:
+        200:
+          $ref: '#/components/schemas/$resource$Schema'
+        400:
+          $ref: '#/components/responses/badRequestResponse'
+        401:
+          $ref: '#/components/responses/unauthorizedResponse'
+        500:
+          $ref: '#/components/responses/internalServerErrorResponse'
+    post:
+      tags:
+        - $tag$
+      summary: Registra um $resource$ no sistema
+      operationId: post$resourceName$
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/post$resourceName$Body'
+      responses:
+        201:
+          $ref: '#/components/responses/postResponse'
+        400:
+          $ref: '#/components/responses/badRequestResponse'
+        401:
+          $ref: '#/components/responses/unauthorizedResponse'
+        500:
+          $ref: '#/components/responses/internalServerErrorResponse'

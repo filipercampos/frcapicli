@@ -1,4 +1,5 @@
 'use stric';
+const { values, subtract } = require('lodash');
 const _ = require('lodash');
 
 module.exports = {
@@ -22,5 +23,26 @@ module.exports = {
         : false
       : false;
     return result;
+  },
+  removeHyphen(text) {
+    let value = '';
+    let hyphen = false;
+    for (let index = 0; index < text.length; index++) {
+      const s = text.substring(index, index + 1);
+      if (s == '-') {
+        hyphen = true;
+      } else {
+        if (hyphen) {
+          value += s.toUpperCase();
+          hyphen = false;
+        } else {
+          value += s;
+        }
+      }
+    }
+    return value;
+  },
+  toResourceName(text) {
+    return this.toFirstCase(this.removeHyphen(text));
   },
 };

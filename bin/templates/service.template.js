@@ -6,14 +6,15 @@ const utils = require('../utils/utils');
  */
 module.exports = {
   get: function (resource) {
-    const resourceUpper = utils.toFirstCase(resource);
+    const resourceUpper = utils.toFirstCase(utils.removeHyphen(resource));
+
     // let resourceLower = pluralize.singular(utils.toFirstCase(resource, false));
     return `'use strict';
 
-const BaseService = require('../base.service');
-const ParameterUtil = require('../../utils/parameter');
+const BaseService = require('../base-api.service');
+const ParameterUtil = require('../../app/common/utils/parameter');
 
-module.exports = class ${resourceUpper}SService extends BaseService {
+module.exports = class ${resourceUpper}Service extends BaseService {
 
     constructor() {
         super();
