@@ -1,6 +1,6 @@
 {
-  "name": "frcapicli",
-  "version": "1.0.8",
+  "name": "frccli",
+  "version": "1.0.0",
   "author": "Filipe Rezende Campos",
   "description": "FRC API CLI NodejS",
   "license": "MIT",
@@ -12,7 +12,7 @@
     "dto",
     "lib",
     "module",
-    "docs"
+    "docs [json]"
   ],
   "bin": {
     "frc": "index.js"
