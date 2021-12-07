@@ -1,7 +1,7 @@
 'use stric';
 const chalk = require('chalk');
 const BaseCommand = require('./base_command');
-const swaggerGenerate = require('../utils/swagger.util');
+const SwaggerUtil = require('../utils/swagger.util');
 
 /**
  * Generate swagger
@@ -17,8 +17,8 @@ module.exports = class SwaggerCommand extends BaseCommand {
     if (json) {
       try {
         console.log(chalk.magenta('Building swagger docs and response ...'));
-        swaggerGenerate.createDocs();
-        swaggerGenerate.createResponse(name, json);
+        SwaggerUtil.createDocs();
+        SwaggerUtil.createResponse(name, json);
       } catch (err) {
         console.error(chalk.red(`Falha na criação do swagger ${err.message}`));
       }
@@ -31,7 +31,7 @@ module.exports = class SwaggerCommand extends BaseCommand {
     const name = this._schematic;
     try {
       console.log(chalk.magenta('Building swagger route ...'));
-      swaggerGenerate.createRoute(name);
+      SwaggerUtil.createRoute(name);
     } catch (err) {
       console.error(chalk.red(`Falha na criação swagger ${err.message}`));
     }

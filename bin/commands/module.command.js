@@ -4,6 +4,7 @@ const fs = require('fs');
 const chalk = require('chalk');
 const path = require('path');
 const SwaggerUtil = require('../utils/swagger.util');
+const SwaggerTemplate = require('../templates/swagger.template');
 const BaseCommand = require('./base_command');
 
 ///All Commands
@@ -73,23 +74,28 @@ module.exports = class ModuleCommand extends BaseCommand {
       //lib (isolate module)
       // this._write(`./src/libs/${resourceName}/`, servicePath, serviceGenerate.get(name), `Service ${name}`)
 
+      //ensure swagger docs
+      SwaggerUtil.createDocs(name);
       //swagger route
-      SwaggerUtil.createRoute(name, 'openapi');
+      SwaggerUtil.createRoute(name);
     } catch (err) {
       console.error(chalk.red(err.message));
 
-      var jsonStruct = `
+      const jsonStruct = `
                 src
-                    app
-                        controllers
-                        docs
-                        domain
-                            models
-                            repositories
-                        routes
-                    infra
-                    libs
-                    main
+                  app
+                    common
+                    controllers
+                    docs
+                    domain
+                      models
+                      repositories
+                    middlewares
+                    routes
+                    shared
+                  infra
+                  libs
+                  main
                 `;
 
       console.log(chalk.yellow(`Check API struct:\n ${jsonStruct}`));

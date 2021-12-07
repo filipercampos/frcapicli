@@ -1,5 +1,5 @@
-# Resources
 components:
+  # Responses
   responses:
     apiResponse:
       description: OK

@@ -23,7 +23,6 @@ module.exports = {
     let route = pluralize.plural(resource).toLowerCase();
     const swaggerPath = path.join(`./src/app/docs/swagger.yaml`);
     let existSwagger = fs.existsSync(swaggerPath);
-    let create = false;
     if (existSwagger === true) {
       const swagger = fs.readFileSync(swaggerPath, 'utf8');
       const data = swagger.replace(/\r/g, '').split('\n');
@@ -38,33 +37,38 @@ module.exports = {
     }
     //get data route
     const dataRoute = SwaggerTemplate.routes(resource);
+    //get data bodies
+    const dataBodies = SwaggerTemplate.bodies(resource);
 
-    if (create) {
-      //save data route
-      fs.appendFileSync(swaggerPath, dataRoute, 'utf-8');
-      //show log
-      console.log(
-        chalk.green(`Swagger route '${resource}' successfully added`)
-      );
-    } else {
-      const swaggerPathTmp = path.join('./tmp/swagger');
-      const swaggerPathRoute = path.join(
-        swaggerPathTmp,
-        `swagger-${route}.yaml`
-      );
+    // if (existSwagger) {
+    //   //save data route
+    //   fs.appendFileSync(swaggerPath, dataRoute.replace('path:', ''), 'utf-8');
+    //   //save data bodies
+    //   fs.appendFileSync(swaggerPath, dataBodies, 'utf-8');
+    //   //show log
+    //   console.log(
+    //     chalk.green(`Swagger route '${resource}' successfully added`)
+    //   );
+    // }
+    const swaggerPathTmp = path.join('./tmp/swagger');
+    const swaggerPathRoute = path.join(swaggerPathTmp, `${route}-routes.yaml`);
+    const swaggerPathBodies = path.join(swaggerPathTmp, `${route}-bodies.yaml`);
 
-      if (!fs.existsSync(swaggerPathTmp)) {
-        fs.mkdirSync(swaggerPathTmp, { recursive: true });
-      }
-
-      fs.writeFileSync(swaggerPathRoute, dataRoute, 'utf-8');
-      console.log(chalk.green(`${swaggerPathRoute} successfully created`));
-      console.warn(
-        chalk.yellow(
-          `*** NOTE *** => ${swaggerPathRoute} must be add manually at swagger.yaml`
-        )
-      );
+    if (!fs.existsSync(swaggerPathTmp)) {
+      fs.mkdirSync(swaggerPathTmp, { recursive: true });
     }
+
+    fs.writeFileSync(swaggerPathRoute, dataRoute, 'utf-8');
+    console.log(chalk.green(`${swaggerPathRoute} successfully created`));
+
+    fs.writeFileSync(swaggerPathBodies, dataBodies, 'utf-8');
+    console.log(chalk.green(`${swaggerPathBodies} successfully created`));
+
+    console.warn(
+      chalk.yellow(
+        `*** NOTE *** => ${swaggerPathRoute} must be add manually at swagger.yaml`
+      )
+    );
   },
 
   /**
@@ -202,7 +206,7 @@ components:
       // destination.yaml will be created or overwritten by default.
       fs.copyFileSync(tarjet, swaggerPath);
 
-      console.log(chalk.green(`API docs successfully created`));
+      console.log(chalk.green(`Swagger docs successfully created`));
 
       // fs.copyFile(tarjet, swaggerPath, (err) => {
       //   if (err) {

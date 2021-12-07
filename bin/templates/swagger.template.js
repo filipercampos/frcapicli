@@ -25,10 +25,10 @@ module.exports = {
       { encoding: 'utf-8' }
     );
     //set values
-    templateRoutes = templateRoutes.replace(/$route$/g, route);
-    templateRoutes = templateRoutes.replace(/$tag$/g, tag);
-    templateRoutes = templateRoutes.replace(/$resource$/g, resource);
-    templateRoutes = templateRoutes.replace(/$resourceName/g, resourceName);
+    templateRoutes = templateRoutes.replace(/\$route\$/g, route);
+    templateRoutes = templateRoutes.replace(/\$tag\$/g, tag);
+    templateRoutes = templateRoutes.replace(/\$resource\$/g, resource);
+    templateRoutes = templateRoutes.replace(/\$resourceName\$/g, resourceName);
 
     return templateRoutes;
   },
@@ -43,6 +43,11 @@ module.exports = {
     );
   },
 
+  /**
+   * Generate bodies
+   * @param {string} resource
+   * @returns
+   */
   bodies: function (resource) {
     //plural
     const route = pluralize.plural(resource).toLowerCase();
@@ -52,14 +57,14 @@ module.exports = {
     const resourceName = utils.toFirstCase(pluralize.singular(resource));
     //data bodies
     let templateBodies = fs.readFileSync(
-      path.join(__dirname, '../resources/swagger-bodies.yaml'),
+      path.join(__dirname, `../resources/swagger-bodies.yaml`),
       { encoding: 'utf-8' }
     );
     //set values
-    templateRoutes = templateRoutes.replace(/$route$/g, route);
-    templateRoutes = templateRoutes.replace(/$tag$/g, tag);
-    templateRoutes = templateRoutes.replace(/$resource$/g, resource);
-    templateRoutes = templateRoutes.replace(/$resourceName/g, resourceName);
+    templateBodies = templateBodies.replace(/\$route\$/g, route);
+    templateBodies = templateBodies.replace(/\$tag\$/g, tag);
+    templateBodies = templateBodies.replace(/\$resource\$/g, resource);
+    templateBodies = templateBodies.replace(/\$resourceName\$/g, resourceName);
     return templateBodies;
   },
 };

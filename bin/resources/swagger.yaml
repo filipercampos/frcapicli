@@ -85,8 +85,8 @@ paths:
     get:
       tags:
         - Users
-      summary: Recupera dados de usuários
-      operationId: getUsuario
+      summary: Get user data by id
+      operationId: getUser
       security:
         - ApiKeyAuth: []
       parameters:
@@ -101,7 +101,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/usuarioResponse'
+                $ref: '#/components/schemas/userResponse'
         400:
           $ref: '#/components/responses/badRequestResponse'
         401:
@@ -112,13 +112,13 @@ paths:
     get:
       tags:
         - Users
-      summary: Recupera dados de usuários
+      summary: Get users data  by criteria
       operationId: getUsers
       security:
         - ApiKeyAuth: []
       parameters:
         - in: query
-          name: nome
+          name: name
           required: true
           allowReserved: true
           schema:
@@ -131,7 +131,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/usuarioResponse'
+                  $ref: '#/components/schemas/userResponse'
         400:
           $ref: '#/components/responses/badRequestResponse'
         401:
@@ -141,8 +141,8 @@ paths:
     post:
       tags:
         - Users
-      summary: Registra um usuário no sistema
-      operationId: postUsuario
+      summary: Save a user
+      operationId: postUsers
       security:
         - ApiKeyAuth: []
       requestBody:
@@ -151,21 +151,14 @@ paths:
             schema:
               type: object
               properties:
-                nomeUsuario:
+                name:
                   type: string
                 email:
                   type: string
-                password:
-                  type: string
-                  description: 'CryptoJS: mode.CBC pad.Pkcs7'
         required: true
       responses:
         201:
-          description: CREATED
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/postResponse'
+          $ref: '#/components/schemas/postResponse'
         400:
           $ref: '#/components/responses/badRequestResponse'
         401:
@@ -230,7 +223,7 @@ components:
               type: integer
             expiresAt:
               type: integer
-    usuarioResponse:
+    userResponse:
       type: object
       properties:
         data:
