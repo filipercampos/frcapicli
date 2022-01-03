@@ -5,7 +5,7 @@ paths:
       tags:
         - $tag$
       summary: Recupera dados de um $resource$
-      operationId: get$Resource$NameById
+      operationId: get$resourceName$ById
       security:
         - ApiKeyAuth: []
       parameters:
@@ -16,7 +16,11 @@ paths:
             type: string
       responses:
         200:
-          $ref: '#/components/schemas/$resource$Schema'
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/$resource$Schema'
         400:
           $ref: '#/components/responses/badRequestResponse'
         401:
@@ -90,7 +94,11 @@ paths:
             enum: ['Enable', 'Disable']
       responses:
         200:
-          $ref: '#/components/schemas/$resource$Schema'
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/$resource$Schema'
         400:
           $ref: '#/components/responses/badRequestResponse'
         401:

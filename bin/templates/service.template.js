@@ -1,5 +1,4 @@
 //This layer was removed from route
-const pluralize = require('pluralize');
 const utils = require('../utils/utils');
 /**
  * Template service

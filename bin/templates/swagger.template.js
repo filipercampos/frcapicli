@@ -16,7 +16,7 @@ module.exports = {
     //plural
     const route = pluralize.plural(resource).toLowerCase();
     //first letter upper plural
-    const tag = utils.toFirstCase(pluralize.plural(resource));
+    const tag = utils.toFirstCase(pluralize.plural(resource).toLowerCase());
     //first letter upper singular
     const resourceName = utils.toFirstCase(pluralize.singular(resource));
     //template routes

@@ -5,7 +5,7 @@ const pluralize = require('pluralize');
  */
 module.exports = {
   get: function (resource) {
-    let resourcePlural = pluralize.plural(resource.toLowerCase());
+    let resourcePlural = pluralize.plural(resource).toLowerCase();
     let resourceLower = resource.toLowerCase();
 
     return `'use strict';

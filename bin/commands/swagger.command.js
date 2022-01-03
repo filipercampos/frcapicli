@@ -20,7 +20,7 @@ module.exports = class SwaggerCommand extends BaseCommand {
         SwaggerUtil.createDocs();
         SwaggerUtil.createResponse(name, json);
       } catch (err) {
-        console.error(chalk.red(`Falha na criação do swagger ${err.message}`));
+        console.error(chalk.red(`Falha na criação do swagger: ${err.message}`));
       }
     } else {
       this.command();

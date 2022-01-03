@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const pluralize = require('pluralize');
 const utils = require('./utils');
-const Exception = require('../exception');
 const _ = require('lodash');
 const chalk = require('chalk');
 const SwaggerTemplate = require('../templates/swagger.template');
@@ -165,7 +164,7 @@ module.exports = {
       swaggerProperties += fieldSwagger;
     }
 
-    let stringData = `# add section components
+    const stringData = `# move to swagger docs
 components:
   schemas:
     ${resourceName}:
@@ -173,10 +172,16 @@ components:
       properties:
       ${swaggerProperties}`;
 
-    fs.appendFile(swaggerPath, stringData, function (err) {
-      if (err) throw new Exception('Build response fail =>\n\t' + err);
-      console.log(chalk.green('Response swagger saved!'));
-    });
+    const swaggerPathRoute = path.join(
+      './tmp/swagger',
+      `${resource}-response.yaml`
+    );
+    fs.writeFileSync(swaggerPathRoute, stringData, 'utf-8');
+    console.log(chalk.green('Response swagger saved!'));
+    // fs.appendFile(swaggerPath, stringData, function (err) {
+    //   if (err) throw new Exception('Build response fail =>\n\t' + err);
+    //   console.log(chalk.green('Response swagger saved!'));
+    // });
   },
 
   /**
@@ -203,7 +208,7 @@ components:
       const tarjet = path.join(`${__dirname}/../resources/swagger.yaml`);
 
       //copy swagger template
-      // destination.yaml will be created or overwritten by default.
+      //destination.yaml will be created or overwritten by default.
       fs.copyFileSync(tarjet, swaggerPath);
 
       console.log(chalk.green(`Swagger docs successfully created`));
